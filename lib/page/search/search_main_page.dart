@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripadvisor/page/search/place_card.dart';
+import 'package:tripadvisor/generated/l10n.dart';
 
 // Main page for searching, including map and search list.
 class SearchMain extends StatefulWidget {
@@ -58,7 +59,7 @@ class _DraggableSearchableListViewState
                     slivers: <Widget>[
                       SliverAppBar(
                         bottom: PreferredSize(
-                          preferredSize: const Size.fromHeight(40),
+                          preferredSize: const Size.fromHeight(45),
                           child: Column(
                             children: <Widget>[
                               TextField(
@@ -67,7 +68,7 @@ class _DraggableSearchableListViewState
                                     filled: true,
                                     border: InputBorder.none,
                                     prefixIcon: Icon(Icons.search),
-                                    hintText: '請輸入地址 \\ 名稱'),
+                                    hintText: S.of(context).search_hint),
                               ),
                               FilterIcon(),
                             ],

@@ -46,7 +46,7 @@ class _PlaceCardState extends State<PlaceCard> {
                                   Icons.flag,
                                   color: Colors.black26,
                                 ),
-                                Text("距離目前位置 123 km"),
+                                Text("距離 123 km"),
                               ],
                             ),
                           ]),
