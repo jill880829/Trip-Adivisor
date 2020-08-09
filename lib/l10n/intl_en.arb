@@ -2,5 +2,14 @@
   "search": "Search",
   "schedule": "Schedule",
   "account": "Account",
-  "search_hint": "Please enter address or place name"
+  "search_hint": "Please enter address or place name",
+  "stay_time" : "Stay time",
+  "start_time" : "Start time",
+  "new_schedule": "New Schedule",
+  "AM": "AM",
+  "PM": "PM",
+  "cancel": "Cancel",
+  "OK": "OK",
+  "about": "About",
+  "minute": "minute"
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripadvisor/page/search/place_card.dart';
 import 'package:tripadvisor/generated/l10n.dart';
+import 'package:tripadvisor/page/data/viewpoint_classify.dart';
 
 // Main page for searching, including map and search list.
 class SearchMain extends StatefulWidget {
@@ -102,14 +103,13 @@ class FilterIcon extends StatefulWidget {
 
 class _FilterIconState extends State<FilterIcon> {
   var showIcon = [false, false, false, false, false];
-  var iconColor = [Colors.red, Colors.deepOrange, Colors.green, Colors.blueAccent, Colors.deepPurple];
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         IconButton(
-          icon: changeIcon(Icons.place, 0),
+          icon: changeIcon(ViewpointClassify.Place),
           onPressed: (){
             setState(() {
               showIcon[0] = !showIcon[0];
@@ -117,7 +117,7 @@ class _FilterIconState extends State<FilterIcon> {
           },
         ),
         IconButton(
-          icon: changeIcon(Icons.local_dining, 1),
+          icon: changeIcon(ViewpointClassify.Eat),
           onPressed: (){
             setState(() {
               showIcon[1] = !showIcon[1];
@@ -125,7 +125,7 @@ class _FilterIconState extends State<FilterIcon> {
           },
         ),
         IconButton(
-          icon: changeIcon(Icons.local_hotel, 2),
+          icon: changeIcon(ViewpointClassify.Hotel),
           onPressed: (){
             setState(() {
               showIcon[2] = !showIcon[2];
@@ -133,7 +133,7 @@ class _FilterIconState extends State<FilterIcon> {
           },
         ),
         IconButton(
-          icon: changeIcon(Icons.train, 3),
+          icon: changeIcon(ViewpointClassify.Transport),
           onPressed: (){
             setState(() {
               showIcon[3] = !showIcon[3];
@@ -141,7 +141,7 @@ class _FilterIconState extends State<FilterIcon> {
           },
         ),
         IconButton(
-          icon: changeIcon(Icons.favorite, 4),
+          icon: changeIcon(ViewpointClassify.Favorite),
           onPressed: (){
             setState(() {
               showIcon[4] = !showIcon[4];
@@ -152,8 +152,8 @@ class _FilterIconState extends State<FilterIcon> {
     );
   }
 
-  Widget changeIcon(IconData icon, int num){
-    return (showIcon[num])?
-        Icon(icon, color: iconColor[num],):Icon(icon, color: Colors.grey,);
+  Widget changeIcon(ViewpointClassify classify){
+    return (showIcon[classify.id])?
+        Icon(classify.icon, color:classify.color,):Icon(classify.icon, color: Colors.grey,);
   }
 }

@@ -2,5 +2,14 @@
   "search": "景點搜尋",
   "schedule": "行程規劃",
   "account": "個人資料",
-  "search_hint": "請輸入地址 \\ 名稱"
+  "search_hint": "請輸入地址 \\ 名稱",
+  "stay_time" : "停留時間",
+  "start_time": "出發時間",
+  "new_schedule": "新增行程",
+  "AM": "上午",
+  "PM": "下午",
+  "cancel": "取消",
+  "OK": "確認",
+  "about": "約",
+  "minute": "分鐘"
 }
