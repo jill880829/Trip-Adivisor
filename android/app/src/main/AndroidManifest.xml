@@ -43,5 +43,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAhvDRUgD9uZ9PORWmvhI6fkR6AhlcBRK4"/>
     </application>
 </manifest>
