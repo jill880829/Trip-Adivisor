@@ -11,5 +11,17 @@
   "cancel": "取消",
   "OK": "確認",
   "about": "約",
-  "minute": "分鐘"
+  "minute": "分鐘",
+  "distant": "距離 {distantCount}",
+  "@distant": {
+    "placeholders": {
+      "distantCount": {}
+    }
+  },
+  "schedule_day": "第 {day} 天",
+  "@schedule_day": {
+    "placeholders": {
+      "day": {}
+    }
+  }
 }

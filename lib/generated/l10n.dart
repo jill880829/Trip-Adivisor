@@ -162,6 +162,26 @@ class S {
       args: [],
     );
   }
+
+  /// `{distantCount} away`
+  String distant(Object distantCount) {
+    return Intl.message(
+      '$distantCount away',
+      name: 'distant',
+      desc: '',
+      args: [distantCount],
+    );
+  }
+
+  /// `Day {day}`
+  String schedule_day(Object day) {
+    return Intl.message(
+      'Day $day',
+      name: 'schedule_day',
+      desc: '',
+      args: [day],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

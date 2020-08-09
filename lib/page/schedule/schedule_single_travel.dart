@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripadvisor/page/schedule/schedule_single_day.dart';
+import 'package:tripadvisor/generated/l10n.dart';
 
 class ScheduleTravel extends StatefulWidget {
   ScheduleTravel({Key key}) : super(key: key);
@@ -150,7 +151,7 @@ class _ScheduleDayState extends State<ScheduleDay> {
           children: <Widget>[
             //TODO: get data from firebase and show each day.
             Text("1/1", style: TextStyle(color: Colors.white70)),
-            Text("第" + widget.day.toString() + "天"),
+            Text(S.of(context).schedule_day(widget.day.toString())),
           ],
         ),
       ),
