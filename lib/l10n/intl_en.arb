@@ -2,5 +2,11 @@
   "search": "Search",
   "schedule": "Schedule",
   "account": "Account",
-  "search_hint": "Please enter address or place name"
+  "search_hint": "Please enter address or place name",
+  "distant": "{distantCount} away",
+  "@distant": {
+    "placeholders": {
+      "distantCount": {}
+    }
+  }
 }

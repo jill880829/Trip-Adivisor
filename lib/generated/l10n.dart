@@ -72,6 +72,16 @@ class S {
       args: [],
     );
   }
+
+  /// `{distantCount} away`
+  String distant(Object distantCount) {
+    return Intl.message(
+      '$distantCount away',
+      name: 'distant',
+      desc: '',
+      args: [distantCount],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

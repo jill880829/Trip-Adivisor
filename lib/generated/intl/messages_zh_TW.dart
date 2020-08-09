@@ -19,9 +19,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_TW';
 
+  static m0(distantCount) => "距離 ${distantCount}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "account" : MessageLookupByLibrary.simpleMessage("個人資料"),
+    "distant" : m0,
     "schedule" : MessageLookupByLibrary.simpleMessage("行程規劃"),
     "search" : MessageLookupByLibrary.simpleMessage("景點搜尋"),
     "search_hint" : MessageLookupByLibrary.simpleMessage("請輸入地址 \\ 名稱")

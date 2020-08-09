@@ -2,5 +2,11 @@
   "search": "景點搜尋",
   "schedule": "行程規劃",
   "account": "個人資料",
-  "search_hint": "請輸入地址 \\ 名稱"
+  "search_hint": "請輸入地址 \\ 名稱",
+  "distant": "距離 {distantCount}",
+  "@distant": {
+    "placeholders": {
+      "distantCount": {}
+    }
+  }
 }
