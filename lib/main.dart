@@ -1,56 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:tripadvisor/page/search/search_main_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:tripadvisor/page/BottomNavigationController.dart';
+
+import 'package:bloc/bloc.dart';
+import 'package:tripadvisor/SimpleBlocDelegate.dart';
+import 'package:tripadvisor/bloc/bloc.dart';
+
+import 'package:tripadvisor/api/api.dart';
 
 void main() {
+  BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(MainScreen());
 }
 
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          builder: (BuildContext context) => 
+            SearchBloc(placeApiProvider: PlaceApiProvider()),
+        )
+      ],
+      child: MaterialApp(
         home: Scaffold(
-        body: BottomNavigationController(),
-    ));
-  }
-}
-
-class BottomNavigationController extends StatefulWidget {
-  BottomNavigationController({Key key}) : super(key: key);
-
-  @override
-  _BottomNavigationControllerState createState() =>
-      _BottomNavigationControllerState();
-}
-
-class _BottomNavigationControllerState
-    extends State<BottomNavigationController> {
-  int _currentIndex = 0;
-  final pages = [SearchMain(), Column(), Column()];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        items: <BottomNavigationBarItem> [
-          BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('景點搜尋')),
-          BottomNavigationBarItem(icon: Icon(Icons.event_note), title: Text('行程規劃')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), title: Text('個人資料')),
-        ],
-        fixedColor: Colors.blueAccent,
-        onTap: _onItemClick,
-      ),
+          body: BottomNavigationController(),
+        )
+      )
     );
   }
-
-  void _onItemClick(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 }
-
-
