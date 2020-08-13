@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripadvisor/generated/l10n.dart';
 
 // Show place data in the search list.
 class PlaceCard extends StatefulWidget {
@@ -46,7 +47,7 @@ class _PlaceCardState extends State<PlaceCard> {
                                   Icons.flag,
                                   color: Colors.black26,
                                 ),
-                                Text("距離目前位置 123 km"),
+                                Text(S.of(context).distant("123 km")),
                               ],
                             ),
                           ]),
