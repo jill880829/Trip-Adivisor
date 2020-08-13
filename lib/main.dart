@@ -19,7 +19,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
+        BlocProvider<SearchBloc>(
           builder: (BuildContext context) => 
             SearchBloc(placeApiProvider: PlaceApiProvider()),
         )
