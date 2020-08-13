@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripadvisor/page/search/search_main_page.dart';
+import 'package:tripadvisor/page/schedule/schedule_main_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tripadvisor/generated/l10n.dart';
 
@@ -19,8 +20,8 @@ class MainScreen extends StatelessWidget {
         ],
         supportedLocales: S.delegate.supportedLocales,
         home: Scaffold(
-        body: BottomNavigationController(),
-    ));
+          body: BottomNavigationController(),
+        ));
   }
 }
 
@@ -35,7 +36,7 @@ class BottomNavigationController extends StatefulWidget {
 class _BottomNavigationControllerState
     extends State<BottomNavigationController> {
   int _currentIndex = 0;
-  final pages = [SearchMain(), Column(), Column()];
+  final pages = [SearchMain(), ScheduleMain(), Column()];
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +44,15 @@ class _BottomNavigationControllerState
       body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        items: <BottomNavigationBarItem> [
-          BottomNavigationBarItem(icon: Icon(Icons.search), title: Text(S.of(context).search)),
-          BottomNavigationBarItem(icon: Icon(Icons.event_note), title: Text(S.of(context).schedule)),
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), title: Text(S.of(context).account)),
+              icon: Icon(Icons.search), title: Text(S.of(context).search)),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.event_note),
+              title: Text(S.of(context).schedule)),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              title: Text(S.of(context).account)),
         ],
         fixedColor: Colors.blueAccent,
         onTap: _onItemClick,
@@ -61,5 +66,3 @@ class _BottomNavigationControllerState
     });
   }
 }
-
-

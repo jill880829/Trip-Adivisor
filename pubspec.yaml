@@ -31,6 +31,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.16.0
+  timeline_tile:
+    git:
+      url: git://github.com/JHBitencourt/timeline_tile
+      ref: master
 
 dev_dependencies:
   flutter_test:

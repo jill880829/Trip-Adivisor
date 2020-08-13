@@ -3,10 +3,25 @@
   "schedule": "Schedule",
   "account": "Account",
   "search_hint": "Please enter address or place name",
+  "stay_time" : "Stay time",
+  "start_time" : "Start time",
+  "new_schedule": "New Schedule",
+  "AM": "AM",
+  "PM": "PM",
+  "cancel": "Cancel",
+  "OK": "OK",
+  "about": "About",
+  "minute": "minute",
   "distant": "{distantCount} away",
   "@distant": {
     "placeholders": {
       "distantCount": {}
+    }
+  },
+  "schedule_day": "Day {day}",
+  "@schedule_day": {
+    "placeholders": {
+      "day": {}
     }
   }
 }

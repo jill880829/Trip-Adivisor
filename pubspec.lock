@@ -336,6 +336,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.15"
+  timeline_tile:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: master
+      resolved-ref: "8aa2365933d8e1d5aa2311698218d0dcbdadfe81"
+      url: "git://github.com/JHBitencourt/timeline_tile"
+    source: git
+    version: "0.1.2"
   typed_data:
     dependency: transitive
     description:
