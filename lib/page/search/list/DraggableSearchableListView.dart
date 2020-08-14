@@ -47,7 +47,7 @@ class _DraggableSearchableListViewState
                   slivers: <Widget>[
                     SliverAppBar(
                       bottom: PreferredSize(
-                        preferredSize: const Size.fromHeight(40),
+                        preferredSize: const Size.fromHeight(45),
                         child: Column(
                           children: <Widget>[
                             TextField(
