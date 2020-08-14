@@ -9,6 +9,9 @@ import 'package:tripadvisor/bloc/bloc.dart';
 
 import 'package:tripadvisor/api/api.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:tripadvisor/generated/l10n.dart';
+
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(MainScreen());
@@ -25,6 +28,13 @@ class MainScreen extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         home: Scaffold(
           body: BottomNavigationController(),
         )

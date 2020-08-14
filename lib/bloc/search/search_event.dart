@@ -1,13 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-class SearchEvent extends Equatable {
-  SearchEvent([List props = const []]) : super(props);
+abstract class SearchEvent extends Equatable {
+  const SearchEvent();
 }
 
 class SearchOnSubmitted extends SearchEvent {
   final String query;
 
-  SearchOnSubmitted({this.query}) : super([query]);
+  const SearchOnSubmitted(this.query);
+
+  @override
+  List<Object> get props => [query];
 
   @override
   String toString() => "SearchOnSubmitted { query: $query }";

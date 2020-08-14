@@ -44,3 +44,6 @@ app.*.map.json
 
 # api key
 *_apiKey.dart
+
+# pubspec.lock
+pubspec.lock
