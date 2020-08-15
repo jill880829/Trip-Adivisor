@@ -12,17 +12,11 @@ class DraggableSearchableListView extends StatefulWidget {
 
   @override
   _DraggableSearchableListViewState createState() =>
-    _DraggableSearchableListViewState();
+      _DraggableSearchableListViewState();
 }
 
 class _DraggableSearchableListViewState
-  extends State<DraggableSearchableListView> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+    extends State<DraggableSearchableListView> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableActuator(
@@ -58,14 +52,10 @@ class _DraggableSearchableListViewState
                                 prefixIcon: Icon(Icons.search),
                                 hintText: S.of(context).search_hint,
                               ),
-                              onSubmitted: (text) {
-                                BlocProvider.of<SearchBloc>(context).dispatch(
-                                  SearchOnSubmitted(text)
-                                );
-                              },
-                              onChanged: (text) {
-                                print ("text: " + text);
-                              }),
+                              onSubmitted: (text) =>
+                                  BlocProvider.of<SearchBloc>(context)
+                                      .dispatch(SearchOnSubmitted(text)),
+                            ),
                             FilterIcon(),
                           ],
                         ),
@@ -73,11 +63,11 @@ class _DraggableSearchableListViewState
                       backgroundColor: Colors.white,
                       pinned: true,
                     ),
-                    PlaceList()
+                    PlaceList(),
                   ],
                 ),
               );
-            }
+            },
           ),
         ],
       ),
@@ -91,7 +81,6 @@ class PlaceList extends StatefulWidget {
 }
 
 class _PlaceListState extends State<PlaceList> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
@@ -101,30 +90,38 @@ class _PlaceListState extends State<PlaceList> {
           return SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 15),
-              child: Center(child: CircularProgressIndicator())
-            )
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
           );
         else if (state is SearchInitial)
           return SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 15),
-              child: Center(child: Text('Init Search'))
-            )
+              child: Center(
+                child: Text('Init Search'),
+              ),
+            ),
           );
         else if (state is SearchLoadSuccess)
           return SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, idx) => PlaceCard(place: state.places[idx]),
+              (context, idx) => PlaceCard(
+                place: state.places[idx],
+              ),
               childCount: state.places.length,
             ),
           );
         return SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.only(top: 15),
-            child: Center(child: Text('Loading Failed'))
-          )
+            child: Center(
+              child: Text('Loading Failed'),
+            ),
+          ),
         );
-      }
+      },
     );
   }
 }
@@ -138,7 +135,13 @@ class FilterIcon extends StatefulWidget {
 
 class _FilterIconState extends State<FilterIcon> {
   var showIcon = [false, false, false, false, false];
-  var iconColor = [Colors.red, Colors.deepOrange, Colors.green, Colors.blueAccent, Colors.deepPurple];
+  var iconColor = [
+    Colors.red,
+    Colors.deepOrange,
+    Colors.green,
+    Colors.blueAccent,
+    Colors.deepPurple
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +149,7 @@ class _FilterIconState extends State<FilterIcon> {
       children: <Widget>[
         IconButton(
           icon: changeIcon(ViewpointClassify.Place),
-          onPressed: (){
+          onPressed: () {
             setState(() {
               showIcon[0] = !showIcon[0];
             });
@@ -154,7 +157,7 @@ class _FilterIconState extends State<FilterIcon> {
         ),
         IconButton(
           icon: changeIcon(ViewpointClassify.Eat),
-          onPressed: (){
+          onPressed: () {
             setState(() {
               showIcon[1] = !showIcon[1];
             });
@@ -162,7 +165,7 @@ class _FilterIconState extends State<FilterIcon> {
         ),
         IconButton(
           icon: changeIcon(ViewpointClassify.Hotel),
-          onPressed: (){
+          onPressed: () {
             setState(() {
               showIcon[2] = !showIcon[2];
             });
@@ -170,7 +173,7 @@ class _FilterIconState extends State<FilterIcon> {
         ),
         IconButton(
           icon: changeIcon(ViewpointClassify.Transport),
-          onPressed: (){
+          onPressed: () {
             setState(() {
               showIcon[3] = !showIcon[3];
             });
@@ -178,7 +181,7 @@ class _FilterIconState extends State<FilterIcon> {
         ),
         IconButton(
           icon: changeIcon(ViewpointClassify.Favorite),
-          onPressed: (){
+          onPressed: () {
             setState(() {
               showIcon[4] = !showIcon[4];
             });
@@ -188,8 +191,10 @@ class _FilterIconState extends State<FilterIcon> {
     );
   }
 
-  Widget changeIcon(ViewpointClassify classify){
-    return (showIcon[classify.id])?
-        Icon(classify.icon, color:classify.color,):Icon(classify.icon, color: Colors.grey,);
+  Widget changeIcon(ViewpointClassify classify) {
+    return Icon(
+      classify.icon,
+      color: (showIcon[classify.id]) ? classify.color : Colors.grey,
+    );
   }
 }

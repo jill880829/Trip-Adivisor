@@ -5,7 +5,9 @@ import 'package:tripadvisor/generated/l10n.dart';
 // Show place data in the search list.
 class PlaceCard extends StatelessWidget {
   final Place _place;
-  PlaceCard({Key key, Place place}) :  _place = place, super(key: key);
+  PlaceCard({Key key, Place place})
+      : _place = place,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,15 @@ class PlaceCard extends StatelessWidget {
                 flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 10, bottom: 10),
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                  ),
                   //child: //Image.asset('assets/images/mountain.jpg'),
-                  child: _place.photos != null ? 
-                    Image.network(_place.photos[0].toLink()) :
-                    Image.asset('assets/images/flutter.jpg')
+                  child: _place.photos != null
+                      ? Image.network(_place.photos[0].toLink())
+                      : Image.asset('assets/images/flutter.jpg'),
                 ),
               ),
               Expanded(
@@ -40,10 +46,14 @@ class PlaceCard extends StatelessWidget {
                       Text(
                         _place.name,
                         style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold
-                        )
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      Container(width: 10.0, height: 10.0),
+                      Container(
+                        width: 10.0,
+                        height: 10.0,
+                      ),
                       Row(
                         children: <Widget>[
                           Icon(
@@ -53,7 +63,7 @@ class PlaceCard extends StatelessWidget {
                           Text(S.of(context).distant("123 km")),
                         ],
                       ),
-                    ]
+                    ],
                   ),
                 ),
               ),
@@ -73,12 +83,8 @@ class PlaceCard extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 6,
-                            child: Text(
-                              _place.user_ratings_total.toString(),
-                              style: TextStyle(
-                                fontSize: 12
-                              )
-                            ),
+                            child: Text(_place.user_ratings_total.toString(),
+                                style: TextStyle(fontSize: 12)),
                           ),
                         ],
                       ),
@@ -98,21 +104,19 @@ class PlaceCard extends StatelessWidget {
                             flex: 6,
                             child: Text(
                               _place.rating.toString(),
-                              style: TextStyle(
-                                fontSize: 12
-                              )
+                              style: TextStyle(fontSize: 12),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ],
-                )
+                ),
               ),
-            ]
-          )
-        )
-      )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
