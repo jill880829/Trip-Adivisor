@@ -30,6 +30,9 @@ class MainScreen extends StatelessWidget {
         BlocProvider<NavigationBloc>(
           builder: (BuildContext context) => NavigationBloc(),
         ),
+        BlocProvider<FilterBloc>(
+          builder: (BuildContext context) => FilterBloc(),
+        )
       ],
       child: MaterialApp(
         localizationsDelegates: [

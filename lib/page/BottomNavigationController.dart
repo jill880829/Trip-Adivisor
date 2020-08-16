@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripadvisor/bloc/bloc.dart';
 
 import 'package:tripadvisor/generated/l10n.dart';
-
-import 'package:tripadvisor/bloc/navigation/navigation.dart';
 
 import 'package:tripadvisor/page/search/main.dart';
 import 'package:tripadvisor/page/schedule/schedule_main_page.dart';

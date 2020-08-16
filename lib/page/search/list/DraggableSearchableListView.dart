@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tripadvisor/page/search/list/PlaceCard.dart';
+import 'package:tripadvisor/page/search/list/PlaceList.dart';
 import 'package:tripadvisor/generated/l10n.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tripadvisor/bloc/search/search.dart';
 import 'package:tripadvisor/page/data/viewpoint_classify.dart';
+import 'package:tripadvisor/page/search/list/Filter.dart';
 
 class DraggableSearchableListView extends StatefulWidget {
   DraggableSearchableListView({Key key}) : super(key: key);
@@ -56,7 +57,7 @@ class _DraggableSearchableListViewState
                                   BlocProvider.of<SearchBloc>(context)
                                       .dispatch(SearchOnSubmitted(text)),
                             ),
-                            FilterIcon(),
+                            Filter(),
                           ],
                         ),
                       ),
@@ -71,130 +72,6 @@ class _DraggableSearchableListViewState
           ),
         ],
       ),
-    );
-  }
-}
-
-class PlaceList extends StatefulWidget {
-  @override
-  _PlaceListState createState() => _PlaceListState();
-}
-
-class _PlaceListState extends State<PlaceList> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<SearchBloc>(context),
-      builder: (context, state) {
-        if (state is SearchLoadInProgress)
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        else if (state is SearchInitial)
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Center(
-                child: Text('Init Search'),
-              ),
-            ),
-          );
-        else if (state is SearchLoadSuccess)
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, idx) => PlaceCard(
-                place: state.places[idx],
-              ),
-              childCount: state.places.length,
-            ),
-          );
-        return SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Center(
-              child: Text('Loading Failed'),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class FilterIcon extends StatefulWidget {
-  FilterIcon({Key key}) : super(key: key);
-
-  @override
-  _FilterIconState createState() => _FilterIconState();
-}
-
-class _FilterIconState extends State<FilterIcon> {
-  var showIcon = [false, false, false, false, false];
-  var iconColor = [
-    Colors.red,
-    Colors.deepOrange,
-    Colors.green,
-    Colors.blueAccent,
-    Colors.deepPurple
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        IconButton(
-          icon: changeIcon(ViewpointClassify.Place),
-          onPressed: () {
-            setState(() {
-              showIcon[0] = !showIcon[0];
-            });
-          },
-        ),
-        IconButton(
-          icon: changeIcon(ViewpointClassify.Eat),
-          onPressed: () {
-            setState(() {
-              showIcon[1] = !showIcon[1];
-            });
-          },
-        ),
-        IconButton(
-          icon: changeIcon(ViewpointClassify.Hotel),
-          onPressed: () {
-            setState(() {
-              showIcon[2] = !showIcon[2];
-            });
-          },
-        ),
-        IconButton(
-          icon: changeIcon(ViewpointClassify.Transport),
-          onPressed: () {
-            setState(() {
-              showIcon[3] = !showIcon[3];
-            });
-          },
-        ),
-        IconButton(
-          icon: changeIcon(ViewpointClassify.Favorite),
-          onPressed: () {
-            setState(() {
-              showIcon[4] = !showIcon[4];
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget changeIcon(ViewpointClassify classify) {
-    return Icon(
-      classify.icon,
-      color: (showIcon[classify.id]) ? classify.color : Colors.grey,
     );
   }
 }
