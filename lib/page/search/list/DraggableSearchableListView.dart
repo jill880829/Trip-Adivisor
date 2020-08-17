@@ -67,7 +67,7 @@ class _DraggableSearchableListViewState
                                           onSubmitted: (text) {
                                             BlocProvider.of<SearchBloc>(context)
                                                 .dispatch(
-                                                    SearchOnSubmitted(text));
+                                                SearchOnSubmitted(text));
                                           },
                                           onChanged: (text) {
                                             print("text: " + text);
@@ -95,36 +95,9 @@ class _DraggableSearchableListViewState
                           padding: const EdgeInsets.only(left: 15, right: 15),
                           child: SingleChildScrollView(
                             controller: scrollController,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 8,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(height: 15,),
-                                      Text(state.place.name, style: TextStyle(
-                                          fontSize: 18, fontWeight: FontWeight.bold)),
-                                      Text(state.place.formatted_address),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: IconButton(
-                                    icon: Icon(Icons.clear),
-                                    onPressed: (){
-                                      BlocProvider.of<DraggableListViewBloc>(context)
-                                          .dispatch(ChangeSearch());
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
+                            child: PlaceDetail(place: state.place),
                           ),
                         );
-
                       return Container(
                         child: Padding(
                             padding: const EdgeInsets.only(top: 15),
@@ -162,7 +135,7 @@ class _PlaceListState extends State<PlaceList> {
           else if (state is SearchLoadSuccess)
             return SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, idx) => PlaceCard(place: state.places[idx]),
+                    (context, idx) => PlaceCard(place: state.places[idx]),
                 childCount: state.places.length,
               ),
             );
@@ -235,12 +208,12 @@ class _FilterIconState extends State<FilterIcon> {
   Widget changeIcon(ViewpointClassify classify) {
     return (showIcon[classify.id])
         ? Icon(
-            classify.icon,
-            color: classify.color,
-          )
+      classify.icon,
+      color: classify.color,
+    )
         : Icon(
-            classify.icon,
-            color: Colors.grey,
-          );
+      classify.icon,
+      color: Colors.grey,
+    );
   }
 }

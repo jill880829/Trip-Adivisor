@@ -182,6 +182,156 @@ class S {
       args: [day],
     );
   }
+
+  /// `Position`
+  String get position {
+    return Intl.message(
+      'Position',
+      name: 'position',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorite`
+  String get favorite {
+    return Intl.message(
+      'Favorite',
+      name: 'favorite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search_web {
+    return Intl.message(
+      'Search',
+      name: 'search_web',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Navigation`
+  String get navigation {
+    return Intl.message(
+      'Navigation',
+      name: 'navigation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Opening Time`
+  String get opening_time {
+    return Intl.message(
+      'Opening Time',
+      name: 'opening_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monday`
+  String get Monday {
+    return Intl.message(
+      'Monday',
+      name: 'Monday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tuesday`
+  String get Tuesday {
+    return Intl.message(
+      'Tuesday',
+      name: 'Tuesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wednesday`
+  String get Wednesday {
+    return Intl.message(
+      'Wednesday',
+      name: 'Wednesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thursday`
+  String get Thursday {
+    return Intl.message(
+      'Thursday',
+      name: 'Thursday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friday`
+  String get Friday {
+    return Intl.message(
+      'Friday',
+      name: 'Friday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saturday`
+  String get Saturday {
+    return Intl.message(
+      'Saturday',
+      name: 'Saturday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sunday`
+  String get Sunday {
+    return Intl.message(
+      'Sunday',
+      name: 'Sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone Number`
+  String get phone {
+    return Intl.message(
+      'Phone Number',
+      name: 'phone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Data`
+  String get no_data {
+    return Intl.message(
+      'No Data',
+      name: 'no_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment`
+  String get comment {
+    return Intl.message(
+      'Comment',
+      name: 'comment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
