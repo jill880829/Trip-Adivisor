@@ -8,13 +8,13 @@ abstract class FilterEvent extends Equatable {
 }
 
 class FilterOnPressed extends FilterEvent {
-  final int index;
+  final String type;
 
-  const FilterOnPressed(this.index);
-
-  @override
-  List<Object> get props => [index];
+  const FilterOnPressed(this.type);
 
   @override
-  String toString() => "FilterOnPressed { index: $index }";
+  List<Object> get props => [type];
+
+  @override
+  String toString() => "FilterOnPressed { type: $type }";
 }

@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 class FilterState extends Equatable {
-  final List<int> show;
+  final List<String> show;
 
   FilterState(this.show);
 
   @override
   List<Object> get props => [show];
 
-  FilterState toggle(int index) {
-    return FilterState(show.contains(index)
-        ? show.where((element) => element != index).toList()
-        : show + [index]);
+  FilterState toggle(String type) {
+    return FilterState(show.contains(type)
+        ? show.where((element) => element != type).toList()
+        : show + [type]);
   }
 
   @override

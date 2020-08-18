@@ -11,14 +11,14 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     FilterEvent event,
   ) async* {
     if (event is FilterOnPressed) {
-      yield* _mapFilteronPressedToState(currentState, event.index);
+      yield* _mapFilteronPressedToState(currentState, event.type);
     }
   }
 }
 
 Stream<FilterState> _mapFilteronPressedToState(
   FilterState currentState,
-  int index,
+  String type,
 ) async* {
-  yield currentState.toggle(index);
+  yield currentState.toggle(type);
 }
