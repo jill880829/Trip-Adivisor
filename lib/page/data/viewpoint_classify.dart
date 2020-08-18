@@ -47,4 +47,17 @@ extension ViewpointExtension on ViewpointClassify {
         return Colors.deepPurple;
     }
   }
+
+  String get type {
+    switch (this) {
+      case ViewpointClassify.Place:
+        return 'tourist_attraction';
+      case ViewpointClassify.Eat:
+        return 'restaurant';
+      case ViewpointClassify.Hotel:
+        return 'lodging';
+      case ViewpointClassify.Transport:
+        return 'transit_station';
+    }
+  }
 }
