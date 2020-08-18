@@ -18,3 +18,23 @@ class SearchOnSubmitted extends SearchEvent {
   @override
   String toString() => "SearchOnSubmitted { query: $query }";
 }
+
+class SearchTextOnChanged extends SearchEvent {
+  final String query;
+
+  const SearchTextOnChanged(this.query);
+
+  @override
+  List<Object> get props => [query];
+
+  @override
+  String toString() => "SearchTextOnChanged { query: $query }";
+}
+
+class SearchRefresh extends SearchEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => "SearchRefresh";
+}

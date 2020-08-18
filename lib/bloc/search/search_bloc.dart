@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:tripadvisor/bloc/bloc.dart';
 import 'search.dart';
 import 'package:tripadvisor/api/place/place.dart';
 import 'package:meta/meta.dart';
@@ -21,6 +22,27 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is SearchOnSubmitted) {
       yield* _mapSearchOnSubmittedToState(event.query);
+    } else if (event is SearchTextOnChanged) {
+      yield* _mapSearchTextOnChangedToState(event.query);
+    } else if (event is SearchRefresh && currentState is SearchLoadSuccess) {
+      List<Place> places = (currentState as SearchLoadSuccess).places;
+      yield SearchLoadInProgress();
+      yield SearchLoadSuccess(places);
+    }
+  }
+
+  Stream<SearchState> _mapSearchTextOnChangedToState(String query) async* {
+    yield SearchLoadInProgress();
+    try {
+      final places = await _placeApiProvider.autocomplete(query: query);
+      if (places.length == 0) {
+        yield SearchLoadFailure();
+        return;
+      }
+      yield SearchLoadSuccess(places);
+    } catch (_) {
+      print(_);
+      yield SearchLoadFailure();
     }
   }
 
