@@ -23,12 +23,15 @@ class _FilterState extends State<Filter> {
               IconButton(
                 icon: Icon(
                   classify.icon,
-                  color: state.show.contains(classify.id)
+                  color: state.show.contains(classify.type)
                       ? classify.color
                       : Colors.grey,
                 ),
-                onPressed: () => BlocProvider.of<FilterBloc>(context)
-                    .dispatch(FilterOnPressed(classify.id)),
+                onPressed: () => {
+                  BlocProvider.of<FilterBloc>(context)
+                      .dispatch(FilterOnPressed(classify.type)),
+                  BlocProvider.of<SearchBloc>(context).dispatch(SearchRefresh())
+                },
               ),
           ],
         );

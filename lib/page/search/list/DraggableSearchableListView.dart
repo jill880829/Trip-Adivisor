@@ -5,8 +5,8 @@ import 'package:tripadvisor/generated/l10n.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:tripadvisor/bloc/search/search.dart';
-import 'package:tripadvisor/page/data/viewpoint_classify.dart';
 import 'package:tripadvisor/page/search/list/Filter.dart';
+import 'package:tripadvisor/page/search/SearchPlaceDelegate.dart';
 
 class DraggableSearchableListView extends StatefulWidget {
   DraggableSearchableListView({Key key}) : super(key: key);
@@ -46,6 +46,8 @@ class _DraggableSearchableListViewState
                         child: Column(
                           children: <Widget>[
                             TextField(
+                              focusNode: FocusNode(),
+                              enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 fillColor: Colors.black12,
                                 filled: true,
@@ -53,9 +55,12 @@ class _DraggableSearchableListViewState
                                 prefixIcon: Icon(Icons.search),
                                 hintText: S.of(context).search_hint,
                               ),
-                              onSubmitted: (text) =>
-                                  BlocProvider.of<SearchBloc>(context)
-                                      .dispatch(SearchOnSubmitted(text)),
+                              onTap: () => showSearch(
+                                context: context,
+                                delegate: SearchPlaceDelegate(
+                                  BlocProvider.of<SearchBloc>(context),
+                                ),
+                              ),
                             ),
                             Filter(),
                           ],
