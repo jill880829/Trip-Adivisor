@@ -75,7 +75,8 @@ class PlaceApiProvider {
             'rating',
             'user_ratings_total',
             'types',
-            'opening_hours/weekday_text'
+            'opening_hours/weekday_text',
+            'review'
           ].join(','),
           'language': 'zh-TW'
         }
