@@ -25,6 +25,10 @@ class MainScreen extends StatelessWidget {
         BlocProvider<SearchBloc>(
           builder: (BuildContext context) => 
             SearchBloc(placeApiProvider: PlaceApiProvider()),
+        ),
+        BlocProvider<DraggableListViewBloc>(
+          builder: (BuildContext context) =>
+              DraggableListViewBloc(),
         )
       ],
       child: MaterialApp(
