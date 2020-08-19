@@ -22,6 +22,9 @@ Place _$PlaceFromJson(Map<String, dynamic> json) {
     (json['rating'] as num)?.toDouble(),
     json['user_ratings_total'] as int,
     (json['types'] as List)?.map((e) => e as String)?.toList(),
+    json['opening_hours'] == null
+        ? null
+        : OpeningHours.fromJson(json['opening_hours'] as Map<String, dynamic>),
   );
 }
 
@@ -35,6 +38,7 @@ Map<String, dynamic> _$PlaceToJson(Place instance) => <String, dynamic>{
       'rating': instance.rating,
       'user_ratings_total': instance.user_ratings_total,
       'types': instance.types,
+      'opening_hours': instance.opening_hours,
     };
 
 Geometry _$GeometryFromJson(Map<String, dynamic> json) {
@@ -73,4 +77,15 @@ Map<String, dynamic> _$PhotoToJson(Photo instance) => <String, dynamic>{
       'height': instance.height,
       'width': instance.width,
       'photo_reference': instance.photo_reference,
+    };
+
+OpeningHours _$OpeningHoursFromJson(Map<String, dynamic> json) {
+  return OpeningHours(
+    (json['weekday_text'] as List)?.map((e) => e as String)?.toList(),
+  );
+}
+
+Map<String, dynamic> _$OpeningHoursToJson(OpeningHours instance) =>
+    <String, dynamic>{
+      'weekday_text': instance.weekday_text,
     };

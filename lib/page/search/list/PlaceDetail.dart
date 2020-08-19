@@ -127,19 +127,11 @@ class PlaceDetail extends StatelessWidget {
             ],
           ),
           children: <Widget>[
-            Text(S.of(context).Monday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Tuesday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Wednesday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Thursday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Friday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Saturday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Sunday + " 11:00–21:30"),
+            if(_place.opening_hours == null)
+              Text(S.of(context).no_data)
+            else
+              for(var text in _place.opening_hours.weekday_text)
+                Text(text),
             Container(height: 10),
           ],
         ),

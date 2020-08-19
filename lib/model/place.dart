@@ -19,6 +19,8 @@ class Place {
   // ignore: non_constant_identifier_names
   final int user_ratings_total;
   final List<String> types;
+  final OpeningHours opening_hours;
+
   Place(
     this.formatted_address,
     this.formatted_phone_number,
@@ -28,7 +30,8 @@ class Place {
     this.place_id,
     this.rating,
     this.user_ratings_total,
-    this.types
+    this.types,
+    this.opening_hours
   );
 
   factory Place.fromJson(Map<String, dynamic> json) =>
@@ -81,3 +84,14 @@ class Photo {
     "https://maps.googleapis.com/maps/api/place/photo?key=$google_apiKey&photoreference=$photo_reference&maxwidth=400";
 }
 
+@JsonSerializable()
+class OpeningHours {
+  final List<String> weekday_text;
+
+  OpeningHours(this.weekday_text);
+
+  factory OpeningHours.fromJson(Map<String, dynamic> json) =>
+      _$OpeningHoursFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OpeningHoursToJson(this);
+}
