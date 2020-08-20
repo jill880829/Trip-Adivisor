@@ -34,8 +34,7 @@ class MainScreen extends StatelessWidget {
           builder: (BuildContext context) => FilterBloc(),
         ),
         BlocProvider<DraggableListViewBloc>(
-          builder: (BuildContext context) =>
-              DraggableListViewBloc(),
+          builder: (BuildContext context) => DraggableListViewBloc(),
         ),
       ],
       child: MaterialApp(

@@ -27,82 +27,89 @@ class _DraggableSearchableListViewState
       child: Stack(
         children: <Widget>[
           DraggableScrollableSheet(
-              initialChildSize: 0.18,
-              minChildSize: 0.18,
-              maxChildSize: 0.85,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return BlocBuilder(
-                    bloc: BlocProvider.of<DraggableListViewBloc>(context),
-                    builder: (context, state) {
-                      if (state is ShowSearch)
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            color: Colors.white,
-                          ),
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: CustomScrollView(
-                            controller: scrollController,
-                            slivers: <Widget>[
-                              SliverAppBar(
-                                bottom: PreferredSize(
-                                  preferredSize: const Size.fromHeight(45),
-                                  child: Column(
-                                    children: <Widget>[
-                                      TextField(
-                                        focusNode: FocusNode(),
-                                        enableInteractiveSelection: false,
-                                        decoration: InputDecoration(
-                                          fillColor: Colors.black12,
-                                          filled: true,
-                                          border: InputBorder.none,
-                                          prefixIcon: Icon(Icons.search),
-                                          hintText: S.of(context).search_hint,
-                                        ),
-                                        onTap: () => showSearch(
-                                          context: context,
-                                          delegate: SearchPlaceDelegate(
-                                            BlocProvider.of<SearchBloc>(context),
-                                          ),
+            initialChildSize: 0.18,
+            minChildSize: 0.18,
+            maxChildSize: 0.85,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return BlocBuilder(
+                bloc: BlocProvider.of<DraggableListViewBloc>(context),
+                builder: (context, state) {
+                  if (state is ShowSearch) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        color: Colors.white,
+                      ),
+                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      child: CustomScrollView(
+                        controller: scrollController,
+                        slivers: <Widget>[
+                          SliverAppBar(
+                            bottom: PreferredSize(
+                              preferredSize: const Size.fromHeight(45),
+                              child: Column(
+                                children: <Widget>[
+                                  TextField(
+                                    focusNode: FocusNode(),
+                                    enableInteractiveSelection: false,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.black12,
+                                      filled: true,
+                                      border: InputBorder.none,
+                                      prefixIcon: Icon(Icons.search),
+                                      hintText: S.of(context).search_hint,
+                                    ),
+                                    onTap: () => showSearch(
+                                      context: context,
+                                      delegate: SearchPlaceDelegate(
+                                        BlocProvider.of<SearchBloc>(
+                                          context,
                                         ),
                                       ),
-                                      FilterIcon(),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                backgroundColor: Colors.white,
-                                pinned: true,
+                                  Filter(),
+                                ],
                               ),
-                              PlaceList()
-                            ],
-                          ),
-                        );
-                      else if (state is ShowDetailSuccess)
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
                             ),
-                            color: Colors.white,
+                            backgroundColor: Colors.white,
+                            pinned: true,
                           ),
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: PlaceDetail(place: state.place),
-                          ),
-                        );
-                      return Container(
-                        child: Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Center(child: Text('Loading Failed'))),
-                      );
-                    });
-              }),
+                          PlaceList()
+                        ],
+                      ),
+                    );
+                  } else if (state is ShowDetailSuccess) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        color: Colors.white,
+                      ),
+                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        child: PlaceDetail(place: state.place),
+                      ),
+                    );
+                  }
+                  return Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Center(
+                        child: Text('Loading Failed'),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
