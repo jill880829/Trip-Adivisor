@@ -12,7 +12,6 @@ class SearchMain extends StatefulWidget {
 }
 
 class _SearchMainState extends State<SearchMain> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +20,7 @@ class _SearchMainState extends State<SearchMain> {
           MyMap(),
           DraggableSearchableListView(),
         ],
-      )
+      ),
     );
   }
 }

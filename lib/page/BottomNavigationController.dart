@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tripadvisor/page/search/main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripadvisor/bloc/bloc.dart';
 
 import 'package:tripadvisor/generated/l10n.dart';
 
+import 'package:tripadvisor/page/search/main.dart';
 import 'package:tripadvisor/page/schedule/schedule_main_page.dart';
 
 class BottomNavigationController extends StatefulWidget {
@@ -10,43 +12,51 @@ class BottomNavigationController extends StatefulWidget {
 
   @override
   _BottomNavigationControllerState createState() =>
-    _BottomNavigationControllerState();
+      _BottomNavigationControllerState();
 }
 
 class _BottomNavigationControllerState
     extends State<BottomNavigationController> {
-  int _currentIndex = 0;
-  final pages = [SearchMain(), ScheduleMain(), Column()];
+  final barItems = [
+    {
+      "page": SearchMain(),
+      "icon": Icons.search,
+      "title": (context) => S.of(context).search,
+    },
+    {
+      "page": ScheduleMain(),
+      "icon": Icons.event_note,
+      "title": (context) => S.of(context).schedule,
+    },
+    {
+      "page": Column(),
+      "icon": Icons.account_circle,
+      "title": (context) => S.of(context).account,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        items: <BottomNavigationBarItem> [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text(S.of(context).search)
+    return BlocBuilder(
+      bloc: BlocProvider.of<NavigationBloc>(context),
+      builder: (context, state) {
+        return Scaffold(
+          body: barItems[state.getIndex()]["page"],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: state.getIndex(),
+            items: <BottomNavigationBarItem>[
+              for (var barItem in barItems)
+                BottomNavigationBarItem(
+                  icon: Icon(barItem["icon"]),
+                  title: Text((barItem["title"] as Function)(context)),
+                )
+            ],
+            fixedColor: Colors.blueAccent,
+            onTap: (index) => BlocProvider.of<NavigationBloc>(context)
+                .dispatch(NavigationOnTap(index)),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event_note),
-            title: Text(S.of(context).schedule)
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text(S.of(context).account)
-          ),
-        ],
-        fixedColor: Colors.blueAccent,
-        onTap: _onItemClick,
-      ),
+        );
+      },
     );
-  }
-
-  void _onItemClick(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
   }
 }

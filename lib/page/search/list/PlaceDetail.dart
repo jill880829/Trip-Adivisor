@@ -56,6 +56,7 @@ class PlaceDetail extends StatelessWidget {
               width: 10,
             ),
             RatingBar(
+              onRatingUpdate: null,
               initialRating: _place.rating != null ? _place.rating : 0,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -69,8 +70,10 @@ class PlaceDetail extends StatelessWidget {
             Container(
               width: 5,
             ),
-            Text("( " + _place.user_ratings_total.toString() + " )",
-                style: TextStyle(fontSize: 12))
+            Text(
+              "( " + _place.user_ratings_total.toString() + " )",
+              style: TextStyle(fontSize: 12),
+            )
           ],
         ),
         Container(
@@ -107,13 +110,14 @@ class PlaceDetail extends StatelessWidget {
           ],
         ),
         Container(
-            height: 250,
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
-            //child: //Image.asset('assets/images/mountain.jpg'),
-            child: _place.photos != null
-                ? Image.network(_place.photos[0].toLink(), fit: BoxFit.fill)
-                : Image.asset('assets/images/flutter.jpg', fit: BoxFit.fill)),
+          height: 250,
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
+          //child: //Image.asset('assets/images/mountain.jpg'),
+          child: _place.photos != null
+              ? Image.network(_place.photos[0].toLink(), fit: BoxFit.fill)
+              : Image.asset('assets/images/flutter.jpg', fit: BoxFit.fill),
+        ),
         Container(
           height: 10,
         ),
@@ -157,10 +161,11 @@ class PlaceDetail extends StatelessWidget {
               Text(S.of(context).phone, style: TextStyle(fontSize: 16)),
               Container(width: 20),
               Text(
-                  _place.formatted_phone_number != null
-                      ? _place.formatted_phone_number
-                      : S.of(context).no_data,
-                  style: TextStyle(fontSize: 16)),
+                _place.formatted_phone_number != null
+                    ? _place.formatted_phone_number
+                    : S.of(context).no_data,
+                style: TextStyle(fontSize: 16),
+              ),
             ],
           ),
         ),
@@ -168,8 +173,10 @@ class PlaceDetail extends StatelessWidget {
         Container(
           width: double.infinity,
           padding: EdgeInsets.all(15),
-          child: Text(S.of(context).comment,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text(
+            S.of(context).comment,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
         for (var length = 0; length < 5; length++) PlaceComment(),
         Container(height: 20),
@@ -188,12 +195,12 @@ class PlaceComment extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-              flex: 2,
-              child: Image.asset(
-                'assets/images/flutter.jpg',
-                width: 50,
-                height: 50,
-              )
+            flex: 2,
+            child: Image.asset(
+              'assets/images/flutter.jpg',
+              width: 50,
+              height: 50,
+            ),
           ),
           Expanded(
             flex: 7,

@@ -23,26 +23,32 @@ class MainScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<SearchBloc>(
-          builder: (BuildContext context) => 
-            SearchBloc(placeApiProvider: PlaceApiProvider()),
+          builder: (BuildContext context) => SearchBloc(
+            placeApiProvider: PlaceApiProvider(),
+          ),
+        ),
+        BlocProvider<NavigationBloc>(
+          builder: (BuildContext context) => NavigationBloc(),
+        ),
+        BlocProvider<FilterBloc>(
+          builder: (BuildContext context) => FilterBloc(),
         ),
         BlocProvider<DraggableListViewBloc>(
-          builder: (BuildContext context) =>
-              DraggableListViewBloc(),
-        )
+          builder: (BuildContext context) => DraggableListViewBloc(),
+        ),
       ],
       child: MaterialApp(
         localizationsDelegates: [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate
+          GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
         home: Scaffold(
           body: BottomNavigationController(),
-        )
-      )
+        ),
+      ),
     );
   }
 }
