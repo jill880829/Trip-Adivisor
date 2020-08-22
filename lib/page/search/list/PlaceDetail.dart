@@ -99,7 +99,14 @@ class PlaceDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: () async {
+                var url = 'https://www.google.com/search?q=' + _place.name;
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
               icon: Icon(Icons.search),
               label: Text(S.of(context).search_web),
             ),
