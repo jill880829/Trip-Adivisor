@@ -49,8 +49,7 @@ class _MyMapState extends State<MyMap> {
 
   Future<void> _moveToLocation(Place place) async {
     final GoogleMapController controller = await _controller.future;
-    await controller
-        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+    await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: LatLng(place.geometry.location.lat, place.geometry.location.lng),
       zoom: 15.0,
     )));
@@ -64,7 +63,7 @@ class _MyMapState extends State<MyMap> {
         marker_color = BitmapDescriptor.hueRed;
       } else if (place.types.any((item) => (item == 'restaurant'))){
         marker_color = BitmapDescriptor.hueOrange;
-      }else if (place.types.any((item) => (item == 'lodging'))){
+      } else if (place.types.any((item) => (item == 'lodging'))){
         marker_color = BitmapDescriptor.hueGreen;
       }else if (place.types.any((item) => (item == 'transit_station'))){
         marker_color = BitmapDescriptor.hueBlue;
@@ -101,7 +100,7 @@ class _MyMapState extends State<MyMap> {
                     state.places,
                     BlocProvider.of<FilterBloc>(context).currentState.show,
                   );
-                  _moveToLocation(filteredPlaces[0]);
+                  if(filteredPlaces.length != 0) _moveToLocation(filteredPlaces[0]);
                   _addMarker(filteredPlaces);
                 }
                 return GoogleMap(
