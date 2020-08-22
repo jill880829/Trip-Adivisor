@@ -4,6 +4,7 @@ import 'package:tripadvisor/bloc/bloc.dart';
 import 'package:tripadvisor/generated/l10n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Show place data in the search list.
 class PlaceDetail extends StatelessWidget {
@@ -142,12 +143,14 @@ class PlaceDetail extends StatelessWidget {
         Container(
           height: 10,
         ),
-        GestureDetector(
-          onTap: () {},
+        FlatButton(
+          onPressed: (){
+            if(_place.formatted_phone_number != null)
+              launch("tel://" + _place.formatted_phone_number );
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(width: 17),
               Icon(Icons.phone),
               Container(width: 10),
               Text(S.of(context).phone, style: TextStyle(fontSize: 16)),
