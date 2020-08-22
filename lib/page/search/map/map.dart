@@ -59,6 +59,18 @@ class _MyMapState extends State<MyMap> {
   void _addMarker(List<Place> place_list) {
     _markers.clear();
     for (final place in place_list) {
+      double marker_color;
+      if (place.types.any((item) => (item == 'tourist_attraction'))){
+        marker_color = BitmapDescriptor.hueRed;
+      } else if (place.types.any((item) => (item == 'restaurant'))){
+        marker_color = BitmapDescriptor.hueOrange;
+      }else if (place.types.any((item) => (item == 'lodging'))){
+        marker_color = BitmapDescriptor.hueGreen;
+      }else if (place.types.any((item) => (item == 'transit_station'))){
+        marker_color = BitmapDescriptor.hueBlue;
+      }else {
+        marker_color = BitmapDescriptor.hueViolet;
+      }
       _markers.add(Marker(
         markerId: MarkerId(place.place_id),
         position:
@@ -67,7 +79,7 @@ class _MyMapState extends State<MyMap> {
           title: place.name,
           snippet: place.rating.toString(),
         ),
-        icon: BitmapDescriptor.defaultMarker,
+        icon: BitmapDescriptor.defaultMarkerWithHue(marker_color),
       ));
     }
   }
@@ -89,7 +101,6 @@ class _MyMapState extends State<MyMap> {
                     state.places,
                     BlocProvider.of<FilterBloc>(context).currentState.show,
                   );
-                  print(filteredPlaces.length);
                   _moveToLocation(filteredPlaces[0]);
                   _addMarker(filteredPlaces);
                 }
