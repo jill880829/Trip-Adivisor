@@ -36,8 +36,7 @@ class Place {
     this.reviews
   );
 
-  factory Place.fromJson(Map<String, dynamic> json) =>
-    _$PlaceFromJson(json);
+  factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlaceToJson(this);
 }
@@ -48,7 +47,7 @@ class Geometry {
   Geometry(this.location);
 
   factory Geometry.fromJson(Map<String, dynamic> json) =>
-    _$GeometryFromJson(json);
+      _$GeometryFromJson(json);
 
   Map<String, dynamic> toJson() => _$GeometryToJson(this);
 }
@@ -60,7 +59,7 @@ class Location {
   Location(this.lat, this.lng);
 
   factory Location.fromJson(Map<String, dynamic> json) =>
-    _$LocationFromJson(json);
+      _$LocationFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationToJson(this);
 }
@@ -71,19 +70,14 @@ class Photo {
   final double width;
   // ignore: non_constant_identifier_names
   final String photo_reference;
-  Photo(
-    this.height,
-    this.width,
-    this.photo_reference
-  );
+  Photo(this.height, this.width, this.photo_reference);
 
-  factory Photo.fromJson(Map<String, dynamic> json) =>
-    _$PhotoFromJson(json);
+  factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
 
   Map<String, dynamic> toJson() => _$PhotoToJson(this);
 
-  String toLink() => 
-    "https://maps.googleapis.com/maps/api/place/photo?key=$google_apiKey&photoreference=$photo_reference&maxwidth=400";
+  String toLink() =>
+      "https://maps.googleapis.com/maps/api/place/photo?key=$google_apiKey&photoreference=$photo_reference&maxwidth=400";
 }
 
 @JsonSerializable()

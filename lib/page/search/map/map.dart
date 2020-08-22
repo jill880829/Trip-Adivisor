@@ -47,35 +47,35 @@ class _MyMapState extends State<MyMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Trip Advisor'),
-          backgroundColor: Colors.blue[700],
-        ),
-        body: Stack(
-          children: <Widget>[
-            GoogleMap(
-              onMapCreated: _onMapCreated,
-              myLocationEnabled: true,
-              initialCameraPosition: CameraPosition(
-                target:
-                    LatLng(currentLocation.latitude, currentLocation.longitude),
-                zoom: 17.0,
+      appBar: AppBar(
+        title: Text('Trip Advisor'),
+        backgroundColor: Colors.blue[700],
+      ),
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            initialCameraPosition: CameraPosition(
+              target:
+                  LatLng(currentLocation.latitude, currentLocation.longitude),
+              zoom: 17.0,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: FloatingActionButton(
+                onPressed: _moveToUserLocation,
+                materialTapTargetSize: MaterialTapTargetSize.padded,
+                backgroundColor: Colors.blue,
+                child: const Icon(Icons.my_location, size: 36.0),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FloatingActionButton(
-                  onPressed: _moveToUserLocation,
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  backgroundColor: Colors.blue,
-                  child: const Icon(Icons.my_location, size: 36.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }
