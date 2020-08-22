@@ -21,7 +21,7 @@ class _MyMapState extends State<MyMap> {
 
   var currentLocation;
 
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
 
   List<Place> filterPlace(List<Place> places, List<String> show) {
     if (show.length == 0) return places;
@@ -56,25 +56,20 @@ class _MyMapState extends State<MyMap> {
     )));
   }
 
-  LatLng _lastMapPosition;
-
-  void _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
-  }
-
-  void _onAddMarkerButtonPressed() {
-    setState(() {
+  void _addMarker(List<Place> place_list) {
+    _markers.clear();
+    for (final place in place_list) {
       _markers.add(Marker(
-        // This marker id can be anything that uniquely identifies each marker.
-        markerId: MarkerId(_lastMapPosition.toString()),
-        position: _lastMapPosition,
+        markerId: MarkerId(place.place_id),
+        position:
+            LatLng(place.geometry.location.lat, place.geometry.location.lng),
         infoWindow: InfoWindow(
-          title: 'Really cool place',
-          snippet: '5 Star Rating',
+          title: place.name,
+          snippet: place.rating.toString(),
         ),
         icon: BitmapDescriptor.defaultMarker,
       ));
-    });
+    }
   }
 
   @override
@@ -94,12 +89,13 @@ class _MyMapState extends State<MyMap> {
                     state.places,
                     BlocProvider.of<FilterBloc>(context).currentState.show,
                   );
+                  print(filteredPlaces.length);
                   _moveToLocation(filteredPlaces[0]);
+                  _addMarker(filteredPlaces);
                 }
                 return GoogleMap(
                   onMapCreated: _onMapCreated,
                   myLocationEnabled: true,
-                  onCameraMove: _onCameraMove,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
                         currentLocation.latitude, currentLocation.longitude),
