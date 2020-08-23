@@ -91,7 +91,9 @@ class PlaceApiProvider {
         'place_id',
         'rating',
         'user_ratings_total',
-        'types'
+        'types',
+        'opening_hours/weekday_text',
+        'review'
       ].join(','),
       'language': 'zh-TW'
     }));

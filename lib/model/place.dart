@@ -19,6 +19,9 @@ class Place {
   // ignore: non_constant_identifier_names
   final int user_ratings_total;
   final List<String> types;
+  final OpeningHours opening_hours;
+  final List<Review> reviews;
+
   Place(
     this.formatted_address,
     this.formatted_phone_number,
@@ -29,6 +32,8 @@ class Place {
     this.rating,
     this.user_ratings_total,
     this.types,
+    this.opening_hours,
+    this.reviews
   );
 
   factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
@@ -73,4 +78,35 @@ class Photo {
 
   String toLink() =>
       "https://maps.googleapis.com/maps/api/place/photo?key=$google_apiKey&photoreference=$photo_reference&maxwidth=400";
+}
+
+@JsonSerializable()
+class OpeningHours {
+  final List<String> weekday_text;
+
+  OpeningHours(this.weekday_text);
+
+  factory OpeningHours.fromJson(Map<String, dynamic> json) =>
+      _$OpeningHoursFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OpeningHoursToJson(this);
+}
+
+@JsonSerializable()
+class Review {
+  final String author_name;
+  final String author_url;
+  final String language;
+  final String profile_photo_url;
+  final int rating;
+  final String relative_time_description;
+  final String text;
+  final int time;
+
+  Review(this.author_name, this.author_url, this.language, this.profile_photo_url, this.rating, this.relative_time_description, this.text, this.time);
+
+  factory Review.fromJson(Map<String, dynamic> json) =>
+      _$ReviewFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReviewToJson(this);
 }

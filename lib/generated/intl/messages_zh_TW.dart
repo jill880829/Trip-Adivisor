@@ -26,15 +26,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "AM" : MessageLookupByLibrary.simpleMessage("上午"),
-    "Friday" : MessageLookupByLibrary.simpleMessage("星期五"),
-    "Monday" : MessageLookupByLibrary.simpleMessage("星期一"),
     "OK" : MessageLookupByLibrary.simpleMessage("確認"),
     "PM" : MessageLookupByLibrary.simpleMessage("下午"),
-    "Saturday" : MessageLookupByLibrary.simpleMessage("星期六"),
-    "Sunday" : MessageLookupByLibrary.simpleMessage("星期日"),
-    "Thursday" : MessageLookupByLibrary.simpleMessage("星期四"),
-    "Tuesday" : MessageLookupByLibrary.simpleMessage("星期二"),
-    "Wednesday" : MessageLookupByLibrary.simpleMessage("星期三"),
     "about" : MessageLookupByLibrary.simpleMessage("約"),
     "account" : MessageLookupByLibrary.simpleMessage("個人資料"),
     "cancel" : MessageLookupByLibrary.simpleMessage("取消"),

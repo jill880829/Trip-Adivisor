@@ -26,15 +26,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "AM" : MessageLookupByLibrary.simpleMessage("AM"),
-    "Friday" : MessageLookupByLibrary.simpleMessage("Friday"),
-    "Monday" : MessageLookupByLibrary.simpleMessage("Monday"),
     "OK" : MessageLookupByLibrary.simpleMessage("OK"),
     "PM" : MessageLookupByLibrary.simpleMessage("PM"),
-    "Saturday" : MessageLookupByLibrary.simpleMessage("Saturday"),
-    "Sunday" : MessageLookupByLibrary.simpleMessage("Sunday"),
-    "Thursday" : MessageLookupByLibrary.simpleMessage("Thursday"),
-    "Tuesday" : MessageLookupByLibrary.simpleMessage("Tuesday"),
-    "Wednesday" : MessageLookupByLibrary.simpleMessage("Wednesday"),
     "about" : MessageLookupByLibrary.simpleMessage("About"),
     "account" : MessageLookupByLibrary.simpleMessage("Account"),
     "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
