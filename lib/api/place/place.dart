@@ -33,7 +33,6 @@ class PlaceApiProvider {
   Future<List<Place>> nearBySearch({double lat, double lng}) async {
     List<Place> ret = [];
     for (var e in ViewpointClassify.values) {
-      if (e != ViewpointClassify.Favorite) {
         var response = await _client
             .get(Uri.https(_baseUrl, '/maps/api/place/nearbysearch/json', {
           'key': _apiKey,
@@ -52,7 +51,6 @@ class PlaceApiProvider {
           final Place place = await details(placeId: placeId);
           if (place.user_ratings_total.toString() != 'null') ret.add(place);
         }
-      }
     }
 
     ret.sort((a, b) => b.user_ratings_total.compareTo(a.user_ratings_total));

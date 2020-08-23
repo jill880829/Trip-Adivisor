@@ -18,3 +18,11 @@ class FilterOnPressed extends FilterEvent {
   @override
   String toString() => "FilterOnPressed { type: $type }";
 }
+
+class FilterClear extends FilterEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => "FilterClear";
+}
