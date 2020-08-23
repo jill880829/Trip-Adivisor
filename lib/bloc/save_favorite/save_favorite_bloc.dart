@@ -45,6 +45,8 @@ class SaveFavoriteBloc extends Bloc<SaveFavoriteEvent, SaveFavoriteState> {
   }
 
   Stream<SaveFavoriteState> _changeFavoriteState(String id) async* {
+    yield ShowFavoriteProgress();
+
     final SharedPreferences prefs = await _prefs;
     List<String> list = prefs.getStringList(_share_key) ?? new List<String>();
 
@@ -56,6 +58,7 @@ class SaveFavoriteBloc extends Bloc<SaveFavoriteEvent, SaveFavoriteState> {
 
     prefs.setStringList(_share_key, list);
     _list = list;
+    yield ShowSearchList();
   }
 
   Stream<SaveFavoriteState> _showFavoriteState(bool search) async* {
@@ -89,10 +92,5 @@ class SaveFavoriteBloc extends Bloc<SaveFavoriteEvent, SaveFavoriteState> {
       places.add(await _placeApiProvider.details(placeId: id));
 
     yield ShowFavoriteList(places);
-  }
-
-  bool isContain (String id) {
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaa");
-    return getList.contains(id);
   }
 }

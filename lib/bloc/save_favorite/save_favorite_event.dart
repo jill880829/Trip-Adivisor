@@ -28,13 +28,14 @@ class ChangeFavorite extends SaveFavoriteEvent {
 
 class FavoriteOnPressed extends SaveFavoriteEvent {
   final bool search;
+
   const FavoriteOnPressed(this.search);
 
   @override
   List<Object> get props => [search];
 
   @override
-  String toString() => "FilterOnPressed ";
+  String toString() => "FavoriteOnPressed";
 }
 
 class FavoriteRefresh extends SaveFavoriteEvent {

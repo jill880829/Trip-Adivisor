@@ -109,8 +109,7 @@ class PlaceDetailState extends State<PlaceDetail> {
                   },
                   icon: Icon(
                     Icons.bookmark,
-                    //TODO: [Bug] No refresh QQ
-                    color: BlocProvider.of<SaveFavoriteBloc>(context).isContain(widget._place.place_id)
+                    color: BlocProvider.of<SaveFavoriteBloc>(context).getList.contains(widget._place.place_id)
                         ? Colors.blueAccent
                         : Colors.black,
                   ),
