@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'map.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   MapBloc() : super(MapInitial());
@@ -16,5 +17,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   Stream<MapState> _mapMapInitializeToState() async* {
     yield MapLoadInProgress();
+    Position position = await Geolocator().getCurrentPosition();
+    yield MapLoadSuccess(position);
   }
 }

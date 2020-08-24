@@ -16,8 +16,6 @@ class SearchMain extends StatefulWidget {
 class _SearchMainState extends State<SearchMain> {
   @override
   Widget build(BuildContext context) {
-    print("haha");
-    print(BlocProvider.of<FilteredSearchBloc>(context));
     return Scaffold(
       body: Stack(
         children: <Widget>[

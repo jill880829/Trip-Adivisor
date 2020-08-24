@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:tripadvisor/model/place.dart';
+import 'package:geolocator/geolocator.dart';
 
 abstract class MapState extends Equatable {
   const MapState();
@@ -23,15 +22,15 @@ class MapLoadInProgress extends MapState {
 }
 
 class MapLoadSuccess extends MapState {
-  final GoogleMapController controller;
+  final Position position;
 
-  const MapLoadSuccess(this.controller);
+  const MapLoadSuccess(this.position);
 
   @override
   String toString() => 'MapLoadSuccess';
 
   @override
-  List<Object> get props => [controller];
+  List<Object> get props => [position];
 }
 
 class MapLoadFailure extends MapState {

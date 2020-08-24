@@ -19,8 +19,8 @@ class _MyMapState extends State<MyMap> {
 
   @override
   void initState() {
-    super.initState();
     BlocProvider.of<MapBloc>(context).add(MapInitialize());
+    super.initState();
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -44,19 +44,30 @@ class _MyMapState extends State<MyMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Trip Advisor'),
-        backgroundColor: Colors.blue[700],
-      ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        myLocationEnabled: true,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(currentLocation.latitude, currentLocation.longitude),
-          zoom: 17.0,
-        ),
-      ),
+    return BlocBuilder<MapBloc, MapState>(
+      builder: (context, state) {
+        if (state is MapLoadSuccess) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Trip Advisor'),
+              backgroundColor: Colors.blue[700],
+            ),
+            body: GoogleMap(
+              onMapCreated: _onMapCreated,
+              myLocationEnabled: true,
+              initialCameraPosition: CameraPosition(
+                target:
+                    LatLng(state.position.latitude, state.position.longitude),
+                zoom: 17.0,
+              ),
+              onCameraMove: (position) {
+                print(position);
+              },
+            ),
+          );
+        }
+        return Text('Error');
+      },
     );
   }
 }
