@@ -131,19 +131,11 @@ class PlaceDetail extends StatelessWidget {
             ],
           ),
           children: <Widget>[
-            Text(S.of(context).Monday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Tuesday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Wednesday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Thursday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Friday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Saturday + " 11:00–21:30"),
-            Container(height: 10),
-            Text(S.of(context).Sunday + " 11:00–21:30"),
+            if(_place.opening_hours == null)
+              Text(S.of(context).no_data)
+            else
+              for(var text in _place.opening_hours.weekday_text)
+                Text(text),
             Container(height: 10),
           ],
         ),
@@ -178,7 +170,7 @@ class PlaceDetail extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
-        for (var length = 0; length < 5; length++) PlaceComment(),
+        for (var review in _place.reviews) PlaceComment(review: review),
         Container(height: 20),
       ],
     );
@@ -186,25 +178,37 @@ class PlaceDetail extends StatelessWidget {
 }
 
 class PlaceComment extends StatelessWidget {
-  PlaceComment({Key key}) : super(key: key);
+  final Review _review;
+  PlaceComment({Key key, @required Review review}) : _review = review, super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 15),
+    return Container(
+      padding: EdgeInsets.only(top: 15),
+      margin: EdgeInsets.only(top: 15),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Colors.black12,
+            width: 1.0,
+          ),
+        ),
+      ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-            flex: 2,
-            child: Image.asset(
-              'assets/images/flutter.jpg',
-              width: 50,
-              height: 50,
-            ),
+              flex: 2,
+              child: Container(
+                padding: EdgeInsets.only(left: 15 ,right: 15),
+                child: _review.profile_photo_url != null
+                    ? Image.network(_review.profile_photo_url, fit: BoxFit.fill)
+                    : Image.asset('assets/images/flutter.jpg', fit: BoxFit.fill),
+              ),
           ),
           Expanded(
             flex: 7,
-            child: Text("雞腿，雞塊咬下去真的會噴汁，肉質軟嫩不柴，買餐前建議先電話預訂"),
+            child: Text(_review.text),
           ),
         ],
       ),
