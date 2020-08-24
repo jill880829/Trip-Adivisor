@@ -14,8 +14,7 @@ class Filter extends StatefulWidget {
 class _FilterState extends State<Filter> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<FilterBloc>(context),
+    return BlocBuilder<FilteredSearchBloc, FilteredSearchState>(
       builder: (context, state) {
         return Row(
           children: <Widget>[
@@ -23,14 +22,13 @@ class _FilterState extends State<Filter> {
               IconButton(
                 icon: Icon(
                   classify.icon,
-                  color: state.show.contains(classify.type)
+                  color: state.activeFilter.contains(classify.type)
                       ? classify.color
                       : Colors.grey,
                 ),
                 onPressed: () => {
-                  BlocProvider.of<FilterBloc>(context)
-                      .dispatch(FilterOnPressed(classify.type)),
-                  BlocProvider.of<SearchBloc>(context).dispatch(SearchRefresh())
+                  BlocProvider.of<FilteredSearchBloc>(context)
+                      .add(FilterUpdated(classify.type)),
                 },
               ),
           ],

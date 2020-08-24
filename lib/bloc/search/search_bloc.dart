@@ -6,15 +6,15 @@ import 'package:tripadvisor/api/place/place.dart';
 import 'package:meta/meta.dart';
 import 'package:tripadvisor/model/place.dart';
 
-class SearchBloc extends Bloc<SearchEvent, SearchState> {
+mixin SuggestionBloc on Bloc<SearchEvent, SearchState> {}
+
+class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
   final PlaceApiProvider _placeApiProvider;
 
   SearchBloc({@required PlaceApiProvider placeApiProvider})
       : assert(placeApiProvider != null),
-        _placeApiProvider = placeApiProvider;
-
-  @override
-  SearchState get initialState => SearchInitial();
+        _placeApiProvider = placeApiProvider,
+        super(SearchInitial());
 
   @override
   Stream<SearchState> mapEventToState(
@@ -24,10 +24,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield* _mapSearchOnSubmittedToState(event.query);
     } else if (event is SearchTextOnChanged) {
       yield* _mapSearchTextOnChangedToState(event.query);
-    } else if (event is SearchRefresh && currentState is SearchLoadSuccess) {
-      List<Place> places = (currentState as SearchLoadSuccess).places;
-      yield SearchLoadInProgress();
-      yield SearchLoadSuccess(places);
     }
   }
 

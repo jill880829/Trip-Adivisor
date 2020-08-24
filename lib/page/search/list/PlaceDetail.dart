@@ -40,7 +40,7 @@ class PlaceDetail extends StatelessWidget {
                 icon: Icon(Icons.clear),
                 onPressed: () {
                   BlocProvider.of<DraggableListViewBloc>(context)
-                      .dispatch(ChangeSearch());
+                      .add(ChangeSearch());
                 },
               ),
             ),

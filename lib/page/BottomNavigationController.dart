@@ -37,8 +37,7 @@ class _BottomNavigationControllerState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<NavigationBloc>(context),
+    return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
           body: barItems[state.getIndex()]["page"],
@@ -53,7 +52,7 @@ class _BottomNavigationControllerState
             ],
             fixedColor: Colors.blueAccent,
             onTap: (index) => BlocProvider.of<NavigationBloc>(context)
-                .dispatch(NavigationOnTap(index)),
+                .add(NavigationOnTap(index)),
           ),
         );
       },

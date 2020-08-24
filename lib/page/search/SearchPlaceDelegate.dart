@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripadvisor/bloc/bloc.dart';
-import 'package:tripadvisor/api/api.dart';
 
 class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
-  final Bloc<SearchEvent, SearchState> searchBloc;
-  final Bloc<SearchEvent, SearchState> suggestionBloc;
-
-  SearchPlaceDelegate(this.searchBloc)
-      : suggestionBloc = SearchBloc(placeApiProvider: PlaceApiProvider());
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -46,9 +38,9 @@ class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query != '') suggestionBloc.dispatch(SearchTextOnChanged(query));
-    return BlocBuilder(
-      bloc: suggestionBloc,
+    if (query != '')
+      BlocProvider.of<SuggestionBloc>(context).add(SearchTextOnChanged(query));
+    return BlocBuilder<SuggestionBloc, SuggestionState>(
       builder: (context, state) {
         if (state is SearchLoadInProgress)
           return Center(
@@ -62,7 +54,8 @@ class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
               ListTile(
                 title: Text('搜尋: ' + query),
                 onTap: () => {
-                  searchBloc.dispatch(SearchOnSubmitted(query)),
+                  BlocProvider.of<SearchBloc>(context)
+                      .add(SearchOnSubmitted(query)),
                   close(context, null),
                 },
               ),
@@ -70,7 +63,8 @@ class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
                 ListTile(
                   title: Text(place.name),
                   onTap: () => {
-                    searchBloc.dispatch(SearchOnSubmitted(place.name)),
+                    BlocProvider.of<SearchBloc>(context)
+                        .add(SearchOnSubmitted(place.name)),
                     close(context, null)
                   },
                 )

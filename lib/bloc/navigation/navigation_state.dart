@@ -5,9 +5,13 @@ abstract class NavigationState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  @override
+  int getIndex() => -1;
 }
 
 class NavigationSearch extends NavigationState {
+  @override
   int getIndex() => 0;
 
   @override
@@ -15,6 +19,7 @@ class NavigationSearch extends NavigationState {
 }
 
 class NavigationSchedule extends NavigationState {
+  @override
   int getIndex() => 1;
 
   @override
@@ -22,6 +27,7 @@ class NavigationSchedule extends NavigationState {
 }
 
 class NavigationAccount extends NavigationState {
+  @override
   int getIndex() => 2;
 
   @override

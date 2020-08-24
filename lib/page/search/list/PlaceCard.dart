@@ -17,7 +17,7 @@ class PlaceCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         BlocProvider.of<DraggableListViewBloc>(context)
-            .dispatch(ChangeDetail(_place));
+            .add(ChangeDetail(_place));
       },
       child: SizedBox(
         height: 130.0,

@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'package:tripadvisor/bloc/bloc.dart';
 
 class MyMap extends StatefulWidget {
   @override
@@ -17,12 +20,7 @@ class _MyMapState extends State<MyMap> {
   @override
   void initState() {
     super.initState();
-    Geolocator().getCurrentPosition().then((currloc) {
-      setState(() {
-        currentLocation = currloc;
-        print(currentLocation.latitude);
-      });
-    });
+    BlocProvider.of<MapBloc>(context).add(MapInitialize());
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -51,30 +49,13 @@ class _MyMapState extends State<MyMap> {
         title: Text('Trip Advisor'),
         backgroundColor: Colors.blue[700],
       ),
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            myLocationEnabled: true,
-            initialCameraPosition: CameraPosition(
-              target:
-                  LatLng(currentLocation.latitude, currentLocation.longitude),
-              zoom: 17.0,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: FloatingActionButton(
-                onPressed: _moveToUserLocation,
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-                backgroundColor: Colors.blue,
-                child: const Icon(Icons.my_location, size: 36.0),
-              ),
-            ),
-          ),
-        ],
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        myLocationEnabled: true,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(currentLocation.latitude, currentLocation.longitude),
+          zoom: 17.0,
+        ),
       ),
     );
   }

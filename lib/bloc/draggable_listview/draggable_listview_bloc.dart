@@ -5,8 +5,7 @@ import 'package:tripadvisor/model/place.dart';
 
 class DraggableListViewBloc
     extends Bloc<DraggableListViewEvent, DraggableListViewState> {
-  @override
-  DraggableListViewState get initialState => ShowSearch();
+  DraggableListViewBloc() : super(ShowSearch());
 
   @override
   Stream<DraggableListViewState> mapEventToState(
@@ -22,7 +21,7 @@ class DraggableListViewBloc
   Stream<DraggableListViewState> _showDetailState(Place place) async* {
     yield ShowDetailInProgress();
 
-    if(place == null)
+    if (place == null)
       yield ShowDetailFailure();
     else
       yield ShowDetailSuccess(place);

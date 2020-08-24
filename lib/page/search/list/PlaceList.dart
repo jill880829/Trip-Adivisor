@@ -12,19 +12,11 @@ class PlaceList extends StatefulWidget {
 }
 
 class _PlaceListState extends State<PlaceList> {
-  List<Place> filterPlace(List<Place> places, List<String> show) {
-    if (show.length == 0) return places;
-    return places
-        .where((place) => place.types.any((item) => show.contains(item)))
-        .toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<SearchBloc>(context),
+    return BlocBuilder<FilteredSearchBloc, FilteredSearchState>(
       builder: (context, state) {
-        if (state is SearchLoadInProgress)
+        if (state is FilteredSearchLoadInProgress)
           return SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 15),
@@ -33,26 +25,13 @@ class _PlaceListState extends State<PlaceList> {
               ),
             ),
           );
-        else if (state is SearchInitial)
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Center(
-                child: Text('Init Search'),
-              ),
-            ),
-          );
-        else if (state is SearchLoadSuccess) {
-          List<Place> filteredPlaces = filterPlace(
-            state.places,
-            BlocProvider.of<FilterBloc>(context).currentState.show,
-          );
+        else if (state is FilteredSearchLoadSuccess) {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, idx) => PlaceCard(
-                place: filteredPlaces[idx],
+                place: state.filteredPlaces[idx],
               ),
-              childCount: filteredPlaces.length,
+              childCount: state.filteredPlaces.length,
             ),
           );
         }

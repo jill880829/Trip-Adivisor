@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:tripadvisor/model/place.dart';
 
-abstract class SearchState extends Equatable {
+mixin SuggestionState on Equatable {}
+
+abstract class SearchState extends Equatable with SuggestionState {
   const SearchState();
 }
 
 class SearchInitial extends SearchState {
-
   @override
   String toString() => 'SearchInitial';
 
