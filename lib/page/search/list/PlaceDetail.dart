@@ -5,6 +5,7 @@ import 'package:tripadvisor/generated/l10n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' show Platform;
 
 // Show place data in the search list.
 class PlaceDetail extends StatefulWidget {
@@ -109,7 +110,9 @@ class PlaceDetailState extends State<PlaceDetail> {
                   },
                   icon: Icon(
                     Icons.bookmark,
-                    color: BlocProvider.of<SaveFavoriteBloc>(context).getList.contains(widget._place.place_id)
+                    color: BlocProvider.of<SaveFavoriteBloc>(context)
+                            .getList
+                            .contains(widget._place.place_id)
                         ? Colors.blueAccent
                         : Colors.black,
                   ),
@@ -136,7 +139,32 @@ class PlaceDetailState extends State<PlaceDetail> {
               label: Text(S.of(context).search_web),
             ),
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: () async {
+                  var url = '';
+                  var urlAppleMaps = '';
+                  if (Platform.isAndroid) {
+                    url =
+                        "https://www.google.com/maps/search/?api=1&query=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}";
+                  } else {
+                    urlAppleMaps =
+                        'https://maps.apple.com/?q=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}';
+                    url =
+                        "comgooglemaps://?saddr=&daddr=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}&directionsmode=driving";
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  }
+
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else if (await canLaunch(urlAppleMaps)) {
+                    await launch(urlAppleMaps);
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+              },
               icon: Icon(Icons.near_me),
               label: Text(S.of(context).navigation),
             ),
