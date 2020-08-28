@@ -36,6 +36,11 @@ class MainScreen extends StatelessWidget {
         BlocProvider<DraggableListViewBloc>(
           builder: (BuildContext context) => DraggableListViewBloc(),
         ),
+        BlocProvider<SaveFavoriteBloc>(
+          builder: (BuildContext context) => SaveFavoriteBloc(
+            placeApiProvider: PlaceApiProvider(),
+          ),
+        ),
       ],
       child: MaterialApp(
         localizationsDelegates: [

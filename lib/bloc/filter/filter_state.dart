@@ -14,6 +14,10 @@ class FilterState extends Equatable {
         : show + [type]);
   }
 
+  FilterState clear() {
+    return FilterState([]);
+  }
+
   @override
   String toString() => 'FilterState $show';
 }

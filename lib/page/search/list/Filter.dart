@@ -14,13 +14,13 @@ class Filter extends StatefulWidget {
 class _FilterState extends State<Filter> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: BlocProvider.of<FilterBloc>(context),
-      builder: (context, state) {
-        return Row(
-          children: <Widget>[
-            for (ViewpointClassify classify in ViewpointClassify.values)
-              IconButton(
+    return Row(
+      children: <Widget>[
+        for (ViewpointClassify classify in ViewpointClassify.values)
+          BlocBuilder(
+            bloc: BlocProvider.of<FilterBloc>(context),
+            builder: (context, state) {
+              return IconButton(
                 icon: Icon(
                   classify.icon,
                   color: state.show.contains(classify.type)
@@ -28,14 +28,32 @@ class _FilterState extends State<Filter> {
                       : Colors.grey,
                 ),
                 onPressed: () => {
+                  BlocProvider.of<SaveFavoriteBloc>(context)
+                      .dispatch(FavoriteOnPressed(true)),
                   BlocProvider.of<FilterBloc>(context)
                       .dispatch(FilterOnPressed(classify.type)),
                   BlocProvider.of<SearchBloc>(context).dispatch(SearchRefresh())
                 },
+              );
+            },
+          ),
+        BlocBuilder(
+          bloc: BlocProvider.of<SaveFavoriteBloc>(context),
+          builder: (context, state) {
+            return IconButton(
+              icon: Icon(
+                Icons.favorite,
+                color: BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch ? Colors.grey : Colors.deepPurple,
               ),
-          ],
-        );
-      },
+              onPressed: () => {
+                BlocProvider.of<SaveFavoriteBloc>(context)
+                    .dispatch(FavoriteOnPressed(!BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch)),
+                BlocProvider.of<FilterBloc>(context).dispatch(FilterClear()),
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }
