@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tripadvisor/page/search/list/PlaceList.dart';
 import 'package:tripadvisor/bloc/bloc.dart';
-import 'package:tripadvisor/page/search/list/PlaceCard.dart';
 import 'package:tripadvisor/page/search/list/PlaceDetail.dart';
 import 'package:tripadvisor/generated/l10n.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:tripadvisor/bloc/search/search.dart';
 import 'package:tripadvisor/page/search/list/Filter.dart';
 import 'package:tripadvisor/page/search/SearchPlaceDelegate.dart';
 
@@ -31,8 +29,7 @@ class _DraggableSearchableListViewState
             minChildSize: 0.18,
             maxChildSize: 0.85,
             builder: (BuildContext context, ScrollController scrollController) {
-              return BlocBuilder(
-                bloc: BlocProvider.of<DraggableListViewBloc>(context),
+              return BlocBuilder<DraggableListViewBloc, DraggableListViewState>(
                 builder: (context, state) {
                   if (state is ShowSearch) {
                     return Container(
@@ -64,11 +61,7 @@ class _DraggableSearchableListViewState
                                     ),
                                     onTap: () => showSearch(
                                       context: context,
-                                      delegate: SearchPlaceDelegate(
-                                        BlocProvider.of<SearchBloc>(
-                                          context,
-                                        ),
-                                      ),
+                                      delegate: SearchPlaceDelegate(),
                                     ),
                                   ),
                                   Filter(),

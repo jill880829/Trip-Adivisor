@@ -19,10 +19,8 @@ class SaveFavoriteBloc extends Bloc<SaveFavoriteEvent, SaveFavoriteState> {
 
   SaveFavoriteBloc({@required PlaceApiProvider placeApiProvider})
       : assert(placeApiProvider != null),
-        _placeApiProvider = placeApiProvider;
-
-  @override
-  SaveFavoriteState get initialState => ShowSearchList();
+        _placeApiProvider = placeApiProvider,
+        super(ShowSearchList());
 
   @override
   Stream<SaveFavoriteState> mapEventToState(SaveFavoriteEvent event) async* {

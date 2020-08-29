@@ -3,8 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'navigation.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  @override
-  NavigationState get initialState => NavigationSearch();
+  NavigationBloc() : super(NavigationSearch());
 
   @override
   Stream<NavigationState> mapEventToState(

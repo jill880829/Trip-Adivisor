@@ -1,14 +1,11 @@
-import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:tripadvisor/page/search/list/PlaceCard.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:tripadvisor/bloc/bloc.dart';
+
 import 'package:tripadvisor/model/place.dart';
 
 class MyMap extends StatefulWidget {
@@ -17,105 +14,42 @@ class MyMap extends StatefulWidget {
 }
 
 class _MyMapState extends State<MyMap> {
-  Completer<GoogleMapController> _controller = Completer();
-
-  var currentLocation;
-
-  Set<Marker> _markers = {};
-
-  List<Place> filterPlace(List<Place> places, List<String> show) {
-    if (show.length == 0) return places;
-    return places
-        .where((place) => place.types.any((item) => show.contains(item)))
-        .toList();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Geolocator().getCurrentPosition().then((currloc) {
-      setState(() {
-        currentLocation = currloc;
-        print(currentLocation.latitude);
-      });
-    });
-  }
+  GoogleMapController _controller;
 
   void _onMapCreated(GoogleMapController controller) {
-    setState(() {
-      _controller.complete(controller);
-    });
+    _controller = controller;
   }
 
-  Future<void> _moveToLocation(Place place) async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(place.geometry.location.lat, place.geometry.location.lng),
-      zoom: 15.0,
-    )));
-  }
-
-  void _addMarker(List<Place> place_list) {
-    _markers.clear();
-    for (final place in place_list) {
-      double marker_color;
-      if (place.types.any((item) => (item == 'tourist_attraction'))){
-        marker_color = BitmapDescriptor.hueRed;
-      } else if (place.types.any((item) => (item == 'restaurant'))){
-        marker_color = BitmapDescriptor.hueOrange;
-      } else if (place.types.any((item) => (item == 'lodging'))){
-        marker_color = BitmapDescriptor.hueGreen;
-      }else if (place.types.any((item) => (item == 'transit_station'))){
-        marker_color = BitmapDescriptor.hueBlue;
-      }else {
-        marker_color = BitmapDescriptor.hueViolet;
-      }
-      _markers.add(Marker(
-        markerId: MarkerId(place.place_id),
-        position:
-            LatLng(place.geometry.location.lat, place.geometry.location.lng),
-        infoWindow: InfoWindow(
-          title: place.name,
-          snippet: place.rating.toString(),
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(marker_color),
-      ));
-    }
+  void _moveToPosition(CameraPosition cameraPosition) {
+    _controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Trip Advisor'),
-        backgroundColor: Colors.blue[700],
-      ),
-      body: Stack(
-        children: <Widget>[
-          BlocBuilder(
-              bloc: BlocProvider.of<SearchBloc>(context),
-              builder: (context, state) {
-                if (state is SearchLoadSuccess) {
-                  List<Place> filteredPlaces = filterPlace(
-                    state.places,
-                    BlocProvider.of<FilterBloc>(context).currentState.show,
-                  );
-                  if(filteredPlaces.length != 0) _moveToLocation(filteredPlaces[0]);
-                  _addMarker(filteredPlaces);
-                }
-                return GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  myLocationEnabled: true,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                        currentLocation.latitude, currentLocation.longitude),
-                    zoom: 10.0,
-                  ),
-                  markers: _markers,
-                );
-              }),
-        ],
-      ),
+    return BlocBuilder<MapBloc, MapState>(
+      builder: (context, mapState) {
+        if (mapState is MapInitial) return Column();
+        if (mapState is MapInMoving) _moveToPosition(mapState.cameraPosition);
+        return GoogleMap(
+          onMapCreated: _onMapCreated,
+          myLocationEnabled: true,
+          initialCameraPosition: mapState.cameraPosition,
+          markers: mapState.markers,
+          onCameraMove: (position) {
+            if (mapState is MapLoadSuccess) {
+              BlocProvider.of<MapBloc>(context).add(MapMoving(position));
+              final LatLng target = position.target;
+              final double zoom = position.zoom;
+              BlocProvider.of<SearchBloc>(context).add(
+                SearchNearbyByLocation(
+                  Location(target.latitude, target.longitude),
+                  3e7 / pow(2, zoom),
+                ),
+              );
+            }
+          },
+        );
+      },
     );
   }
 }

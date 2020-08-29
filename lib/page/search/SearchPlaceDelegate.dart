@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripadvisor/bloc/bloc.dart';
-import 'package:tripadvisor/api/api.dart';
+import 'package:tripadvisor/model/place.dart';
 
 class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
-  final Bloc<SearchEvent, SearchState> searchBloc;
-  final Bloc<SearchEvent, SearchState> suggestionBloc;
-
-  SearchPlaceDelegate(this.searchBloc)
-      : suggestionBloc = SearchBloc(placeApiProvider: PlaceApiProvider());
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -46,9 +40,17 @@ class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query != '') suggestionBloc.dispatch(SearchTextOnChanged(query));
-    return BlocBuilder(
-      bloc: suggestionBloc,
+    MapBloc mapBloc = BlocProvider.of<MapBloc>(context);
+    if (query != '' && mapBloc.state is MapLoadSuccess) {
+      final target = (mapBloc.state as MapLoadSuccess).cameraPosition.target;
+      BlocProvider.of<SuggestionBloc>(context).add(
+        SearchSuggestionList(
+          query,
+          Location(target.latitude, target.longitude),
+        ),
+      );
+    }
+    return BlocBuilder<SuggestionBloc, SuggestionState>(
       builder: (context, state) {
         if (state is SearchLoadInProgress)
           return Center(
@@ -59,19 +61,25 @@ class SearchPlaceDelegate extends SearchDelegate<Future<Widget>> {
         else if (state is SearchLoadSuccess)
           return ListView(
             children: <Widget>[
-              ListTile(
-                title: Text('搜尋: ' + query),
-                onTap: () => {
-                  searchBloc.dispatch(SearchOnSubmitted(query)),
-                  close(context, null),
-                },
-              ),
-              for (var place in state.places)
+              for (var place in state.nearby)
                 ListTile(
                   title: Text(place.name),
-                  onTap: () => {
-                    searchBloc.dispatch(SearchOnSubmitted(place.name)),
-                    close(context, null)
+                  onTap: () {
+                    BlocProvider.of<MapBloc>(context).add(
+                      MapMoving(
+                        CameraPosition(
+                          target: LatLng(
+                            place.geometry.location.lat,
+                            place.geometry.location.lng,
+                          ),
+                          zoom: 15,
+                        ),
+                      ),
+                    );
+                    BlocProvider.of<SearchBloc>(context).add(
+                      SearchNearbyByPlace(place, 1000),
+                    );
+                    close(context, null);
                   },
                 )
             ],

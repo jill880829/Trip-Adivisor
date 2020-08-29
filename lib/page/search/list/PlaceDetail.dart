@@ -4,6 +4,7 @@ import 'package:tripadvisor/bloc/bloc.dart';
 import 'package:tripadvisor/generated/l10n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
@@ -48,10 +49,10 @@ class PlaceDetailState extends State<PlaceDetail> {
                 icon: Icon(Icons.clear),
                 onPressed: () {
                   BlocProvider.of<DraggableListViewBloc>(context)
-                      .dispatch(ChangeSearch());
+                      .add(ChangeSearch());
                   if (!BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch)
                     BlocProvider.of<SaveFavoriteBloc>(context)
-                        .dispatch(FavoriteRefresh());
+                        .add(FavoriteRefresh());
                 },
               ),
             ),
@@ -62,31 +63,36 @@ class PlaceDetailState extends State<PlaceDetail> {
         ),
         Row(
           children: <Widget>[
-            Text(widget._place.rating.toString(),
-                style: TextStyle(fontSize: 12)),
-            Container(
-              width: 10,
-            ),
-            RatingBar(
-              onRatingUpdate: null,
-              initialRating:
-                  widget._place.rating != null ? widget._place.rating : 0,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemSize: 20.0,
-              itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
+            if (widget._place.rating != null)
+              Text(widget._place.rating.toString(),
+                  style: TextStyle(fontSize: 12)),
+            if (widget._place.rating != null)
+              Container(
+                width: 10,
               ),
-            ),
-            Container(
-              width: 5,
-            ),
-            Text(
-              "( " + widget._place.user_ratings_total.toString() + " )",
-              style: TextStyle(fontSize: 12),
-            )
+            if (widget._place.rating != null)
+              RatingBar(
+                onRatingUpdate: null,
+                initialRating:
+                    widget._place.rating != null ? widget._place.rating : 0,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemSize: 20.0,
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+              ),
+            if (widget._place.rating != null)
+              Container(
+                width: 5,
+              ),
+            if (widget._place.rating != null)
+              Text(
+                "( " + widget._place.user_ratings_total.toString() + " )",
+                style: TextStyle(fontSize: 12),
+              ),
           ],
         ),
         Container(
@@ -96,17 +102,31 @@ class PlaceDetailState extends State<PlaceDetail> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                BlocProvider.of<MapBloc>(context).add(
+                  MapMoving(
+                    CameraPosition(
+                      target: LatLng(
+                        widget._place.geometry.location.lat,
+                        widget._place.geometry.location.lng,
+                      ),
+                      zoom: 15,
+                    ),
+                  ),
+                );
+                BlocProvider.of<SearchBloc>(context).add(
+                  SearchNearbyByPlace(widget._place, 1000),
+                );
+              },
               icon: Icon(Icons.my_location),
               label: Text(S.of(context).position),
             ),
-            BlocBuilder(
-              bloc: BlocProvider.of<SaveFavoriteBloc>(context),
+            BlocBuilder<SaveFavoriteBloc, SaveFavoriteState>(
               builder: (context, state) {
                 return FlatButton.icon(
                   onPressed: () {
                     BlocProvider.of<SaveFavoriteBloc>(context)
-                        .dispatch(ChangeFavorite(widget._place.place_id));
+                        .add(ChangeFavorite(widget._place.place_id));
                   },
                   icon: Icon(
                     Icons.bookmark,
@@ -140,30 +160,30 @@ class PlaceDetailState extends State<PlaceDetail> {
             ),
             FlatButton.icon(
               onPressed: () async {
-                  var url = '';
-                  var urlAppleMaps = '';
-                  if (Platform.isAndroid) {
-                    url =
-                        "https://www.google.com/maps/search/?api=1&query=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}";
-                  } else {
-                    urlAppleMaps =
-                        'https://maps.apple.com/?q=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}';
-                    url =
-                        "comgooglemaps://?saddr=&daddr=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}&directionsmode=driving";
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  }
-
+                var url = '';
+                var urlAppleMaps = '';
+                if (Platform.isAndroid) {
+                  url =
+                      "https://www.google.com/maps/search/?api=1&query=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}";
+                } else {
+                  urlAppleMaps =
+                      'https://maps.apple.com/?q=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}';
+                  url =
+                      "comgooglemaps://?saddr=&daddr=${widget._place.geometry.location.lat},${widget._place.geometry.location.lng}&directionsmode=driving";
                   if (await canLaunch(url)) {
                     await launch(url);
-                  } else if (await canLaunch(urlAppleMaps)) {
-                    await launch(urlAppleMaps);
                   } else {
                     throw 'Could not launch $url';
                   }
+                }
+
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else if (await canLaunch(urlAppleMaps)) {
+                  await launch(urlAppleMaps);
+                } else {
+                  throw 'Could not launch $url';
+                }
               },
               icon: Icon(Icons.near_me),
               label: Text(S.of(context).navigation),
@@ -226,15 +246,18 @@ class PlaceDetailState extends State<PlaceDetail> {
           ),
         ),
         Container(height: 20),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(15),
-          child: Text(
-            S.of(context).comment,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        if (widget._place.reviews != null)
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(15),
+            child: Text(
+              S.of(context).comment,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        for (var review in widget._place.reviews) PlaceComment(review: review),
+        if (widget._place.reviews != null)
+          for (var review in widget._place.reviews)
+            PlaceComment(review: review),
         Container(height: 20),
       ],
     );

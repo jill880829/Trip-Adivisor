@@ -14,46 +14,46 @@ class Filter extends StatefulWidget {
 class _FilterState extends State<Filter> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        for (ViewpointClassify classify in ViewpointClassify.values)
-          BlocBuilder(
-            bloc: BlocProvider.of<FilterBloc>(context),
-            builder: (context, state) {
-              return IconButton(
+    return BlocBuilder<FilteredSearchBloc, FilteredSearchState>(
+      builder: (context, state) {
+        return BlocBuilder<SaveFavoriteBloc, SaveFavoriteState>(
+          builder: (context, favoriteState) {
+            return Row(children: <Widget>[
+              for (ViewpointClassify classify in ViewpointClassify.values)
+                IconButton(
+                  icon: Icon(
+                    classify.icon,
+                    color: state.activeFilter.contains(classify.type)
+                        ? classify.color
+                        : Colors.grey,
+                  ),
+                  onPressed: () => {
+                    BlocProvider.of<FilteredSearchBloc>(context)
+                        .add(FilterUpdated(classify.type)),
+                    BlocProvider.of<SaveFavoriteBloc>(context)
+                        .add(FavoriteOnPressed(true)),
+                  },
+                ),
+              IconButton(
                 icon: Icon(
-                  classify.icon,
-                  color: state.show.contains(classify.type)
-                      ? classify.color
-                      : Colors.grey,
+                  Icons.favorite,
+                  color: BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch
+                      ? Colors.grey
+                      : Colors.deepPurple,
                 ),
                 onPressed: () => {
-                  BlocProvider.of<SaveFavoriteBloc>(context)
-                      .dispatch(FavoriteOnPressed(true)),
-                  BlocProvider.of<FilterBloc>(context)
-                      .dispatch(FilterOnPressed(classify.type)),
-                  BlocProvider.of<SearchBloc>(context).dispatch(SearchRefresh())
+                  BlocProvider.of<SaveFavoriteBloc>(context).add(
+                      FavoriteOnPressed(
+                          !BlocProvider.of<SaveFavoriteBloc>(context)
+                              .getIsSearch)),
+                  BlocProvider.of<FilteredSearchBloc>(context)
+                      .add(FilterClear()),
                 },
-              );
-            },
-          ),
-        BlocBuilder(
-          bloc: BlocProvider.of<SaveFavoriteBloc>(context),
-          builder: (context, state) {
-            return IconButton(
-              icon: Icon(
-                Icons.favorite,
-                color: BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch ? Colors.grey : Colors.deepPurple,
-              ),
-              onPressed: () => {
-                BlocProvider.of<SaveFavoriteBloc>(context)
-                    .dispatch(FavoriteOnPressed(!BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch)),
-                BlocProvider.of<FilterBloc>(context).dispatch(FilterClear()),
-              },
-            );
+              )
+            ]);
           },
-        ),
-      ],
+        );
+      },
     );
   }
 }

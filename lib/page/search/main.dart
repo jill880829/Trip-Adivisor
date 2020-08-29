@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:tripadvisor/page/search/list/DraggableSearchableListView.dart';
 import 'package:tripadvisor/page/search/map/map.dart';
 

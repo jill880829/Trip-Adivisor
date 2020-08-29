@@ -30,25 +30,25 @@ class PlaceApiProvider {
     return ret;
   }
 
-  Future<List<Place>> nearBySearch({double lat, double lng}) async {
+  Future<List<Place>> nearBySearch(Location location, double radius) async {
     List<Place> ret = [];
     for (var e in ViewpointClassify.values) {
         var response = await _client
             .get(Uri.https(_baseUrl, '/maps/api/place/nearbysearch/json', {
           'key': _apiKey,
-          'location': lat.toString() + ',' + lng.toString(),
-          'rankby': 'distance',
+          'location': location.lat.toString() + ',' + location.lng.toString(),
+          'radius': radius.toString(),
           'language': 'zh-TW',
           'type': e.type
         }));
 
-        final List<String> placeIds = json
+        final List<Place> places = json
             .decode(response.body)['results']
-            .map<String>((item) => item['place_id'].toString())
+            .map<Place>((item) => Place.fromJson(item))
             .toList();
 
-        for (var placeId in placeIds) {
-          final Place place = await details(placeId: placeId);
+        for (var place in places) {
+          place.type = e.type;
           if (place.user_ratings_total.toString() != 'null') ret.add(place);
         }
     }
@@ -57,12 +57,14 @@ class PlaceApiProvider {
     return ret;
   }
 
-  Future<List<Place>> autocomplete({String query}) async {
+  Future<List<Place>> autocomplete({String query, Location location}) async {
     final response = await _client
         .get(Uri.https(_baseUrl, '/maps/api/place/autocomplete/json', {
       'key': _apiKey,
       'language': 'zh-TW',
       'input': query,
+      'location': location.lat.toString() + ',' + location.lng.toString(),
+      'radius': '1',
     }));
 
     final List<String> placeIds = json
