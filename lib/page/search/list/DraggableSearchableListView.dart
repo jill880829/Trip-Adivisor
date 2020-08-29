@@ -49,19 +49,38 @@ class _DraggableSearchableListViewState
                               preferredSize: const Size.fromHeight(45),
                               child: Column(
                                 children: <Widget>[
-                                  TextField(
-                                    focusNode: FocusNode(),
-                                    enableInteractiveSelection: false,
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.black12,
-                                      filled: true,
-                                      border: InputBorder.none,
-                                      prefixIcon: Icon(Icons.search),
-                                      hintText: S.of(context).search_hint,
+                                  Container(
+                                    decoration: new BoxDecoration(
+                                      borderRadius:
+                                          new BorderRadius.circular(16.0),
+                                      color: Colors.black12,
                                     ),
-                                    onTap: () => showSearch(
-                                      context: context,
-                                      delegate: SearchPlaceDelegate(),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Flexible(
+                                          child: TextField(
+                                            focusNode: FocusNode(),
+                                            enableInteractiveSelection: false,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              prefixIcon: Icon(Icons.search),
+                                              hintText:
+                                                  S.of(context).search_hint,
+                                            ),
+                                            onTap: () => showSearch(
+                                              context: context,
+                                              delegate: SearchPlaceDelegate(),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 5,
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.cancel),
+                                          onPressed: () {},
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Filter(),

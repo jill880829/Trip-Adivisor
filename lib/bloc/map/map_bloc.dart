@@ -1,6 +1,9 @@
+import 'dart:ui' as ui;
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripadvisor/bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripadvisor/bloc/filtered_search/filtered_search.dart';
 import 'map.dart';
@@ -8,11 +11,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:tripadvisor/model/place.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
+
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   final FilteredSearchBloc filteredSearchBloc;
   StreamSubscription filteredSearchSubscription;
+  Map<String, BitmapDescriptor> place_icon = new Map<String,BitmapDescriptor>();
+
   MapBloc({@required this.filteredSearchBloc}) : super(MapInitial(null, {})) {
+    setCustomMapMarker();
     filteredSearchSubscription =
         filteredSearchBloc.listen((filteredSearchState) {
       if (filteredSearchState is FilteredSearchLoadSuccess) {
@@ -74,18 +83,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Set<Marker> _mapListToMarkerSet(Place pivot, List<Place> nearby) {
     Set<Marker> markers = {};
     for (final place in nearby) {
-      double marker_color;
-      if (place.type == 'tourist_attraction') {
-        marker_color = BitmapDescriptor.hueRed;
-      } else if (place.type == 'restaurant') {
-        marker_color = BitmapDescriptor.hueOrange;
-      } else if (place.type == 'lodging') {
-        marker_color = BitmapDescriptor.hueGreen;
-      } else if (place.type == 'transit_station') {
-        marker_color = BitmapDescriptor.hueBlue;
-      } else {
-        marker_color = BitmapDescriptor.hueViolet;
-      }
       markers.add(Marker(
         markerId: MarkerId(place.place_id),
         position:
@@ -94,7 +91,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           title: place.name,
           snippet: place.rating.toString(),
         ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(marker_color),
+        icon: place_icon[place.type],
       ));
     }
     if (pivot != null) {
@@ -116,5 +113,24 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future<void> close() {
     filteredSearchSubscription.cancel();
     return super.close();
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
+  }
+
+  void setCustomMapMarker() async {
+    final Uint8List place = await getBytesFromAsset('assets/images/icon_place.png', 70);
+    final Uint8List eat = await getBytesFromAsset('assets/images/icon_eat.png', 70);
+    final Uint8List hotel = await getBytesFromAsset('assets/images/icon_hotel.png', 70);
+    final Uint8List bus = await getBytesFromAsset('assets/images/icon_bus.png', 70);
+
+    place_icon["tourist_attraction"] = BitmapDescriptor.fromBytes(place);
+    place_icon["restaurant"] = BitmapDescriptor.fromBytes(eat);
+    place_icon["lodging"] = BitmapDescriptor.fromBytes(hotel);
+    place_icon["transit_station"] = BitmapDescriptor.fromBytes(bus);
   }
 }
