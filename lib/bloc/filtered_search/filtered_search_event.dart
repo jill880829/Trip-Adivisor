@@ -48,3 +48,11 @@ class FilteredSearchUpdating extends FilteredSearchEvent {
   @override
   String toString() => "FilteredSearchUpdating";
 }
+
+class FilterClear extends FilteredSearchEvent {
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => "FilterClear";
+}

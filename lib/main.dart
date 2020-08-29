@@ -49,7 +49,12 @@ class MainScreen extends StatelessWidget {
           create: (BuildContext context) => MapBloc(
             filteredSearchBloc: BlocProvider.of<FilteredSearchBloc>(context),
           ),
-        )
+        ),
+        BlocProvider<SaveFavoriteBloc>(
+          create: (BuildContext context) => SaveFavoriteBloc(
+            placeApiProvider: PlaceApiProvider(),
+          ),
+        ),
       ],
       child: MaterialApp(
         localizationsDelegates: [

@@ -36,7 +36,22 @@ class FilteredSearchBloc
       yield* _mapFilteredSearchUpdatingToState(event);
     } else if (event is FilteredSearchUpdated) {
       yield* _mapFilteredSearchUpdatedToState(event);
+    } else if (event is FilterClear) {
+      yield* _mapFilterClearToState(event, state);
     }
+  }
+
+  Stream<FilteredSearchState> _mapFilterClearToState(
+    FilterClear event,
+    FilteredSearchLoadSuccess state,
+  ) async* {
+    yield FilteredSearchLoadInProgress(List<String>());
+    yield FilteredSearchLoadSuccess(
+      state.pivot,
+      state.nearby,
+      state.currentPosition,
+      List<String>(),
+    );
   }
 
   Stream<FilteredSearchState> _mapFilterUpdatedToState(
@@ -51,8 +66,6 @@ class FilteredSearchBloc
                   .where((element) => element != event.type)
                   .toList()
               : state.activeFilter + [event.type];
-      print(state.activeFilter);
-      print(newActivedFilter);
       yield FilteredSearchLoadSuccess(
         (searchBloc.state as SearchLoadSuccess).pivot,
         _mapPlacesToFilteredPlaces(

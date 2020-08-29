@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ViewpointClassify { Place, Eat, Hotel, Transport, Favorite }
+enum ViewpointClassify { Place, Eat, Hotel, Transport }
 
 extension ViewpointExtension on ViewpointClassify {
   int get id {
@@ -13,8 +13,6 @@ extension ViewpointExtension on ViewpointClassify {
         return 2;
       case ViewpointClassify.Transport:
         return 3;
-      case ViewpointClassify.Favorite:
-        return 4;
     }
   }
 
@@ -28,8 +26,6 @@ extension ViewpointExtension on ViewpointClassify {
         return Icons.local_hotel;
       case ViewpointClassify.Transport:
         return Icons.train;
-      case ViewpointClassify.Favorite:
-        return Icons.favorite;
     }
   }
 
@@ -43,8 +39,6 @@ extension ViewpointExtension on ViewpointClassify {
         return Colors.green;
       case ViewpointClassify.Transport:
         return Colors.blueAccent;
-      case ViewpointClassify.Favorite:
-        return Colors.deepPurple;
     }
   }
 

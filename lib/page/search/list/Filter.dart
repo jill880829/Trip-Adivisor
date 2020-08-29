@@ -16,22 +16,42 @@ class _FilterState extends State<Filter> {
   Widget build(BuildContext context) {
     return BlocBuilder<FilteredSearchBloc, FilteredSearchState>(
       builder: (context, state) {
-        return Row(
-          children: <Widget>[
-            for (ViewpointClassify classify in ViewpointClassify.values)
+        return BlocBuilder<SaveFavoriteBloc, SaveFavoriteState>(
+          builder: (context, favoriteState) {
+            return Row(children: <Widget>[
+              for (ViewpointClassify classify in ViewpointClassify.values)
+                IconButton(
+                  icon: Icon(
+                    classify.icon,
+                    color: state.activeFilter.contains(classify.type)
+                        ? classify.color
+                        : Colors.grey,
+                  ),
+                  onPressed: () => {
+                    BlocProvider.of<FilteredSearchBloc>(context)
+                        .add(FilterUpdated(classify.type)),
+                    BlocProvider.of<SaveFavoriteBloc>(context)
+                        .add(FavoriteOnPressed(true)),
+                  },
+                ),
               IconButton(
                 icon: Icon(
-                  classify.icon,
-                  color: state.activeFilter.contains(classify.type)
-                      ? classify.color
-                      : Colors.grey,
+                  Icons.favorite,
+                  color: BlocProvider.of<SaveFavoriteBloc>(context).getIsSearch
+                      ? Colors.grey
+                      : Colors.deepPurple,
                 ),
                 onPressed: () => {
+                  BlocProvider.of<SaveFavoriteBloc>(context).add(
+                      FavoriteOnPressed(
+                          !BlocProvider.of<SaveFavoriteBloc>(context)
+                              .getIsSearch)),
                   BlocProvider.of<FilteredSearchBloc>(context)
-                      .add(FilterUpdated(classify.type)),
+                      .add(FilterClear()),
                 },
-              ),
-          ],
+              )
+            ]);
+          },
         );
       },
     );
