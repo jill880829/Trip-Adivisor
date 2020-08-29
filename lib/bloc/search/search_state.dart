@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:tripadvisor/model/place.dart';
+import 'package:geolocator/geolocator.dart';
 
 mixin SuggestionState on Equatable {}
 
-abstract class SearchState extends Equatable with SuggestionState {
-  const SearchState();
-}
+abstract class SearchState extends Equatable with SuggestionState {}
 
 class SearchInitial extends SearchState {
   @override
@@ -15,24 +14,26 @@ class SearchInitial extends SearchState {
   List<Object> get props => [];
 }
 
+class SearchLoadSuccess extends SearchState {
+  final Place pivot;
+  final List<Place> nearby;
+  final Position currentPosition;
+
+  SearchLoadSuccess(this.pivot, this.nearby, this.currentPosition);
+
+  @override
+  String toString() => 'SearchLoadSuccess';
+
+  @override
+  List<Object> get props => [pivot, nearby, currentPosition];
+}
+
 class SearchLoadInProgress extends SearchState {
   @override
   String toString() => 'SearchLoadInProgress';
 
   @override
   List<Object> get props => [];
-}
-
-class SearchLoadSuccess extends SearchState {
-  final List<Place> places;
-
-  const SearchLoadSuccess(this.places);
-
-  @override
-  String toString() => 'SearchLoadSuccess';
-
-  @override
-  List<Object> get props => [places];
 }
 
 class SearchLoadFailure extends SearchState {

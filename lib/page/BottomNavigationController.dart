@@ -36,6 +36,12 @@ class _BottomNavigationControllerState
   ];
 
   @override
+  void initState() {
+    BlocProvider.of<SearchBloc>(context).add(SearchInitialized());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {

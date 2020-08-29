@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
-
+import 'dart:math';
 import 'package:tripadvisor/api/google_apiKey.dart';
+import 'package:geolocator/geolocator.dart';
 
 part 'place.g.dart';
 
@@ -18,23 +19,22 @@ class Place {
   final double rating;
   // ignore: non_constant_identifier_names
   final int user_ratings_total;
-  final List<String> types;
+  String type;
   final OpeningHours opening_hours;
   final List<Review> reviews;
 
   Place(
-    this.formatted_address,
-    this.formatted_phone_number,
-    this.geometry,
-    this.name,
-    this.photos,
-    this.place_id,
-    this.rating,
-    this.user_ratings_total,
-    this.types,
-    this.opening_hours,
-    this.reviews
-  );
+      this.formatted_address,
+      this.formatted_phone_number,
+      this.geometry,
+      this.name,
+      this.photos,
+      this.place_id,
+      this.rating,
+      this.user_ratings_total,
+      this.type,
+      this.opening_hours,
+      this.reviews);
 
   factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
 
@@ -62,6 +62,30 @@ class Location {
       _$LocationFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocationToJson(this);
+
+  String toDistance(Position position) {
+    double distance = calculateDistance(
+      lat,
+      lng,
+      position.latitude,
+      position.longitude,
+    );
+    if (distance < 1) {
+      distance *= 1000;
+      return distance.round().toString() + " m";
+    } else {
+      return distance.round().toString() + " km";
+    }
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
 }
 
 @JsonSerializable()
@@ -103,10 +127,17 @@ class Review {
   final String text;
   final int time;
 
-  Review(this.author_name, this.author_url, this.language, this.profile_photo_url, this.rating, this.relative_time_description, this.text, this.time);
+  Review(
+      this.author_name,
+      this.author_url,
+      this.language,
+      this.profile_photo_url,
+      this.rating,
+      this.relative_time_description,
+      this.text,
+      this.time);
 
-  factory Review.fromJson(Map<String, dynamic> json) =>
-      _$ReviewFromJson(json);
+  factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewToJson(this);
 }

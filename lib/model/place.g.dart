@@ -21,7 +21,7 @@ Place _$PlaceFromJson(Map<String, dynamic> json) {
     json['place_id'] as String,
     (json['rating'] as num)?.toDouble(),
     json['user_ratings_total'] as int,
-    (json['types'] as List)?.map((e) => e as String)?.toList(),
+    json['type'] as String,
     json['opening_hours'] == null
         ? null
         : OpeningHours.fromJson(json['opening_hours'] as Map<String, dynamic>),
@@ -41,7 +41,7 @@ Map<String, dynamic> _$PlaceToJson(Place instance) => <String, dynamic>{
       'place_id': instance.place_id,
       'rating': instance.rating,
       'user_ratings_total': instance.user_ratings_total,
-      'types': instance.types,
+      'type': instance.type,
       'opening_hours': instance.opening_hours,
       'reviews': instance.reviews,
     };

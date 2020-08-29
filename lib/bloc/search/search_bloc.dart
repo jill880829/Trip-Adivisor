@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripadvisor/bloc/bloc.dart';
 import 'search.dart';
 import 'package:tripadvisor/api/place/place.dart';
 import 'package:meta/meta.dart';
 import 'package:tripadvisor/model/place.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:geolocator/geolocator.dart';
 
 mixin SuggestionBloc on Bloc<SearchEvent, SearchState> {}
 
@@ -12,59 +16,96 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
   final PlaceApiProvider _placeApiProvider;
 
   SearchBloc({@required PlaceApiProvider placeApiProvider})
-      : assert(placeApiProvider != null),
-        _placeApiProvider = placeApiProvider,
+      : _placeApiProvider = placeApiProvider,
         super(SearchInitial());
+
+  @override
+  Stream<Transition<SearchEvent, SearchState>> transformEvents(
+    Stream<SearchEvent> events,
+    Stream<Transition<SearchEvent, SearchState>> Function(SearchEvent event)
+        transitionFn,
+  ) {
+    return events
+        .debounceTime(const Duration(milliseconds: 500))
+        .switchMap(transitionFn);
+  }
 
   @override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
-    if (event is SearchOnSubmitted) {
-      yield* _mapSearchOnSubmittedToState(event.query);
-    } else if (event is SearchTextOnChanged) {
-      yield* _mapSearchTextOnChangedToState(event.query);
+    if (event is SearchInitialized) {
+      yield* _mapSearchInitializedToState(event, state);
+    } else if (event is SearchNearbyByLocation) {
+      yield* _mapSearchNearbyByLocationToState(event, state);
+    } else if (event is SearchNearbyByPlace) {
+      yield* _mapSearchNearbyByPlaceToState(event, state);
+    } else if (event is SearchSuggestionList) {
+      yield* _mapSearchSuggestionListToState(event);
     }
   }
 
-  Stream<SearchState> _mapSearchTextOnChangedToState(String query) async* {
+  Stream<SearchState> _mapSearchInitializedToState(
+    SearchInitialized event,
+    SearchInitial state,
+  ) async* {
+    yield SearchLoadInProgress();
+    final Position currentPosition = await Geolocator().getCurrentPosition();
+    final List<Place> nearby = await _placeApiProvider.nearBySearch(
+      Location(
+        currentPosition.latitude,
+        currentPosition.longitude,
+      ),
+      1000,
+    );
+    yield SearchLoadSuccess(null, nearby, currentPosition);
+  }
+
+  Stream<SearchState> _mapSearchNearbyByPlaceToState(
+    SearchNearbyByPlace event,
+    SearchState state,
+  ) async* {
+    final Position currentPosition = await Geolocator().getCurrentPosition();
+    final nearby = await _placeApiProvider.nearBySearch(
+      event.place.geometry.location,
+      event.radius,
+    );
+    yield SearchLoadSuccess(event.place, nearby, currentPosition);
+  }
+
+  Stream<SearchState> _mapSearchNearbyByLocationToState(
+    SearchNearbyByLocation event,
+    SearchLoadSuccess state,
+  ) async* {
     yield SearchLoadInProgress();
     try {
-      final places = await _placeApiProvider.autocomplete(query: query);
-      if (places.length == 0) {
-        yield SearchLoadFailure();
-        return;
-      }
-      yield SearchLoadSuccess(places);
+      final Position position = await Geolocator().getCurrentPosition();
+      final nearby = await _placeApiProvider.nearBySearch(
+        event.location,
+        event.radius,
+      );
+      yield SearchLoadSuccess(state.pivot, nearby, position);
     } catch (_) {
       print(_);
       yield SearchLoadFailure();
     }
   }
 
-  Stream<SearchState> _mapSearchOnSubmittedToState(String query) async* {
+  Stream<SearchState> _mapSearchSuggestionListToState(
+    SearchSuggestionList event,
+  ) async* {
     yield SearchLoadInProgress();
     try {
-      final places = await _placeApiProvider.findPlaceFromText(query: query);
+      final Position position = await Geolocator().getCurrentPosition();
+      final places = await _placeApiProvider.autocomplete(
+        query: event.query,
+        location: event.location,
+      );
       if (places.length == 0) {
         yield SearchLoadFailure();
         return;
       }
-
-      List<Place> nearPlaces = (await _placeApiProvider.nearBySearch(
-              lat: places[0].geometry.location.lat,
-              lng: places[0].geometry.location.lng))
-          .where((element) => element.rating.toString() != 'null')
-          .toList()
-          .where((element) => element.user_ratings_total.toString() != 'null')
-          .toList()
-          .where((element) => element.place_id != places[0].place_id)
-          .toList();
-
-      nearPlaces
-          .sort((a, b) => b.user_ratings_total.compareTo(a.user_ratings_total));
-
-      yield SearchLoadSuccess([places[0]] + nearPlaces);
+      yield SearchLoadSuccess(null, places, position);
     } catch (_) {
       print(_);
       yield SearchLoadFailure();

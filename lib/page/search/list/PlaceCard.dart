@@ -60,7 +60,14 @@ class PlaceCard extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           Icon(Icons.flag, color: Colors.black26),
-                          Text(S.of(context).distant("123 km")),
+                          Text(
+                            S.of(context).distant(
+                                  _place.geometry.location.toDistance(
+                                      (BlocProvider.of<SearchBloc>(context)
+                                              .state as SearchLoadSuccess)
+                                          .currentPosition),
+                                ),
+                          ),
                         ],
                       ),
                     ],
@@ -72,44 +79,46 @@ class PlaceCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 4,
-                            child: Icon(Icons.comment),
-                          ),
-                          Expanded(
-                            flex: 6,
-                            child: Text(
-                              _place.user_ratings_total.toString(),
-                              style: TextStyle(fontSize: 12),
+                    if (_place.rating != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 4,
+                              child: Icon(Icons.comment),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 4,
-                            child: Icon(Icons.star),
-                          ),
-                          Expanded(
-                            flex: 6,
-                            child: Text(
-                              _place.rating.toString(),
-                              style: TextStyle(fontSize: 12),
+                            Expanded(
+                              flex: 6,
+                              child: Text(
+                                _place.user_ratings_total.toString(),
+                                style: TextStyle(fontSize: 12),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                    if (_place.rating != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 4,
+                              child: Icon(Icons.star),
+                            ),
+                            Expanded(
+                              flex: 6,
+                              child: Text(
+                                _place.rating.toString(),
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),

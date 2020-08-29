@@ -1,11 +1,16 @@
 import 'package:equatable/equatable.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class MapState extends Equatable {
-  const MapState();
+  final CameraPosition cameraPosition;
+  final Set<Marker> markers;
+  const MapState(this.cameraPosition, this.markers);
 }
 
 class MapInitial extends MapState {
+  MapInitial(CameraPosition cameraPosition, Set<Marker> markers)
+      : super(cameraPosition, markers);
+
   @override
   String toString() => 'MapInitial';
 
@@ -13,27 +18,32 @@ class MapInitial extends MapState {
   List<Object> get props => [];
 }
 
-class MapLoadInProgress extends MapState {
+class MapInMoving extends MapState {
+  MapInMoving(CameraPosition cameraPosition, Set<Marker> markers)
+      : super(cameraPosition, markers);
+
   @override
-  String toString() => 'MapLoadInProgress';
+  String toString() => 'MapMoving';
 
   @override
   List<Object> get props => [];
 }
 
 class MapLoadSuccess extends MapState {
-  final Position position;
-
-  const MapLoadSuccess(this.position);
+  const MapLoadSuccess(Set<Marker> markers, CameraPosition cameraPosition)
+      : super(cameraPosition, markers);
 
   @override
   String toString() => 'MapLoadSuccess';
 
   @override
-  List<Object> get props => [position];
+  List<Object> get props => [markers];
 }
 
 class MapLoadFailure extends MapState {
+  MapLoadFailure(CameraPosition cameraPosition, Set<Marker> markers)
+      : super(cameraPosition, markers);
+
   @override
   String toString() => 'MapLoadFailure';
 

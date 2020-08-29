@@ -4,6 +4,7 @@ import 'package:tripadvisor/bloc/bloc.dart';
 import 'package:tripadvisor/generated/l10n.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // Show place data in the search list.
 class PlaceDetail extends StatelessWidget {
@@ -51,29 +52,34 @@ class PlaceDetail extends StatelessWidget {
         ),
         Row(
           children: <Widget>[
-            Text(_place.rating.toString(), style: TextStyle(fontSize: 12)),
-            Container(
-              width: 10,
-            ),
-            RatingBar(
-              onRatingUpdate: null,
-              initialRating: _place.rating != null ? _place.rating : 0,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemSize: 20.0,
-              itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
+            if (_place.rating != null)
+              Text(_place.rating.toString(), style: TextStyle(fontSize: 12)),
+            if (_place.rating != null)
+              Container(
+                width: 10,
               ),
-            ),
-            Container(
-              width: 5,
-            ),
-            Text(
-              "( " + _place.user_ratings_total.toString() + " )",
-              style: TextStyle(fontSize: 12),
-            )
+            if (_place.rating != null)
+              RatingBar(
+                onRatingUpdate: null,
+                initialRating: _place.rating != null ? _place.rating : 0,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemSize: 20.0,
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+              ),
+            if (_place.rating != null)
+              Container(
+                width: 5,
+              ),
+            if (_place.rating != null)
+              Text(
+                "( " + _place.user_ratings_total.toString() + " )",
+                style: TextStyle(fontSize: 12),
+              )
           ],
         ),
         Container(
@@ -83,7 +89,22 @@ class PlaceDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             FlatButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                BlocProvider.of<MapBloc>(context).add(
+                  MapMoving(
+                    CameraPosition(
+                      target: LatLng(
+                        _place.geometry.location.lat,
+                        _place.geometry.location.lng,
+                      ),
+                      zoom: 15,
+                    ),
+                  ),
+                );
+                BlocProvider.of<SearchBloc>(context).add(
+                  SearchNearbyByPlace(_place, 1000),
+                );
+              },
               icon: Icon(Icons.my_location),
               label: Text(S.of(context).position),
             ),
@@ -131,11 +152,10 @@ class PlaceDetail extends StatelessWidget {
             ],
           ),
           children: <Widget>[
-            if(_place.opening_hours == null)
+            if (_place.opening_hours == null)
               Text(S.of(context).no_data)
             else
-              for(var text in _place.opening_hours.weekday_text)
-                Text(text),
+              for (var text in _place.opening_hours.weekday_text) Text(text),
             Container(height: 10),
           ],
         ),
@@ -162,15 +182,17 @@ class PlaceDetail extends StatelessWidget {
           ),
         ),
         Container(height: 20),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(15),
-          child: Text(
-            S.of(context).comment,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        if (_place.reviews != null)
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(15),
+            child: Text(
+              S.of(context).comment,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        for (var review in _place.reviews) PlaceComment(review: review),
+        if (_place.reviews != null)
+          for (var review in _place.reviews) PlaceComment(review: review),
         Container(height: 20),
       ],
     );
@@ -179,7 +201,9 @@ class PlaceDetail extends StatelessWidget {
 
 class PlaceComment extends StatelessWidget {
   final Review _review;
-  PlaceComment({Key key, @required Review review}) : _review = review, super(key: key);
+  PlaceComment({Key key, @required Review review})
+      : _review = review,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -198,13 +222,13 @@ class PlaceComment extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-              flex: 2,
-              child: Container(
-                padding: EdgeInsets.only(left: 15 ,right: 15),
-                child: _review.profile_photo_url != null
-                    ? Image.network(_review.profile_photo_url, fit: BoxFit.fill)
-                    : Image.asset('assets/images/flutter.jpg', fit: BoxFit.fill),
-              ),
+            flex: 2,
+            child: Container(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: _review.profile_photo_url != null
+                  ? Image.network(_review.profile_photo_url, fit: BoxFit.fill)
+                  : Image.asset('assets/images/flutter.jpg', fit: BoxFit.fill),
+            ),
           ),
           Expanded(
             flex: 7,

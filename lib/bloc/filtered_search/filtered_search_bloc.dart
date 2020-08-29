@@ -12,11 +12,16 @@ class FilteredSearchBloc
 
   FilteredSearchBloc({@required this.searchBloc})
       : super(FilteredSearchInitial()) {
-    searchSubscription = searchBloc.listen((state) {
-      if (state is SearchLoadInProgress) {
-        add(PlacesUpdating());
-      } else if (state is SearchLoadSuccess) {
-        add(PlacesUpdated((searchBloc.state as SearchLoadSuccess).places));
+    searchSubscription = searchBloc.listen((searchState) {
+      if (searchState is SearchLoadInProgress) {
+        add(FilteredSearchUpdating());
+      } else if (searchState is SearchLoadSuccess) {
+        add(FilteredSearchUpdated(
+          searchState.pivot,
+          searchState.nearby,
+          searchState.currentPosition,
+          state.activeFilter,
+        ));
       }
     });
   }
@@ -26,61 +31,68 @@ class FilteredSearchBloc
     FilteredSearchEvent event,
   ) async* {
     if (event is FilterUpdated) {
-      yield* _mapFilterUpdatedToState(event.type);
-    } else if (event is PlacesUpdating) {
-      yield* _mapPlacesUpdatingToState(event);
-    } else if (event is PlacesUpdated) {
-      yield* _mapPlacesUpdatedToState(event);
+      yield* _mapFilterUpdatedToState(event, state);
+    } else if (event is FilteredSearchUpdating) {
+      yield* _mapFilteredSearchUpdatingToState(event);
+    } else if (event is FilteredSearchUpdated) {
+      yield* _mapFilteredSearchUpdatedToState(event);
     }
   }
 
   Stream<FilteredSearchState> _mapFilterUpdatedToState(
-    String type,
+    FilterUpdated event,
+    FilteredSearchState state,
   ) async* {
+    yield FilteredSearchLoadInProgress(state.activeFilter);
     if (searchBloc.state is SearchLoadSuccess) {
-      final List<String> newActivedFilter = state.activeFilter.contains(type)
-          ? state.activeFilter.where((element) => element != type).toList()
-          : state.activeFilter + [type];
+      final List<String> newActivedFilter =
+          state.activeFilter.contains(event.type)
+              ? state.activeFilter
+                  .where((element) => element != event.type)
+                  .toList()
+              : state.activeFilter + [event.type];
+      print(state.activeFilter);
+      print(newActivedFilter);
       yield FilteredSearchLoadSuccess(
+        (searchBloc.state as SearchLoadSuccess).pivot,
         _mapPlacesToFilteredPlaces(
-          (searchBloc.state as SearchLoadSuccess).places,
+          (searchBloc.state as SearchLoadSuccess).nearby,
           newActivedFilter,
         ),
+        (searchBloc.state as SearchLoadSuccess).currentPosition,
         newActivedFilter,
       );
     }
   }
 
-  Stream<FilteredSearchState> _mapPlacesUpdatingToState(
+  Stream<FilteredSearchState> _mapFilteredSearchUpdatingToState(
     FilteredSearchEvent event,
   ) async* {
     yield FilteredSearchLoadInProgress(state.activeFilter);
   }
 
-  Stream<FilteredSearchState> _mapPlacesUpdatedToState(
+  Stream<FilteredSearchState> _mapFilteredSearchUpdatedToState(
     FilteredSearchEvent event,
   ) async* {
-    yield FilteredSearchLoadSuccess(
-      _mapPlacesToFilteredPlaces(
-        (searchBloc.state as SearchLoadSuccess).places,
+    if (searchBloc.state is SearchLoadSuccess) {
+      yield FilteredSearchLoadSuccess(
+        (searchBloc.state as SearchLoadSuccess).pivot,
+        _mapPlacesToFilteredPlaces(
+          (searchBloc.state as SearchLoadSuccess).nearby,
+          state.activeFilter,
+        ),
+        (searchBloc.state as SearchLoadSuccess).currentPosition,
         state.activeFilter,
-      ),
-      state.activeFilter,
-    );
+      );
+    }
   }
 
   List<Place> _mapPlacesToFilteredPlaces(
-    List<Place> places,
+    List<Place> nearBy,
     List<String> activeFilter,
   ) {
-    if (activeFilter.length == 0) return places;
-    return places.where((place) {
-      if (activeFilter.length == 0) {
-        return true;
-      } else {
-        return place.types.any((item) => activeFilter.contains(item));
-      }
-    }).toList();
+    if (activeFilter.length == 0) return nearBy;
+    return nearBy.where((place) => activeFilter.contains(place.type)).toList();
   }
 
   @override

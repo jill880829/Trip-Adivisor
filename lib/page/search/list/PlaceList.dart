@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripadvisor/page/search/list/PlaceCard.dart';
 
 import 'package:tripadvisor/bloc/bloc.dart';
-import 'package:tripadvisor/model/place.dart';
 
 class PlaceList extends StatefulWidget {
   @override
@@ -26,14 +25,25 @@ class _PlaceListState extends State<PlaceList> {
             ),
           );
         else if (state is FilteredSearchLoadSuccess) {
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, idx) => PlaceCard(
-                place: state.filteredPlaces[idx],
+          if (state.pivot != null) {
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, idx) => PlaceCard(
+                  place: ([state.pivot] + state.nearby)[idx],
+                ),
+                childCount: state.nearby.length + 1,
               ),
-              childCount: state.filteredPlaces.length,
-            ),
-          );
+            );
+          } else {
+            return SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, idx) => PlaceCard(
+                  place: state.nearby[idx],
+                ),
+                childCount: state.nearby.length,
+              ),
+            );
+          }
         }
         return SliverToBoxAdapter(
           child: Padding(

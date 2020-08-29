@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripadvisor/bloc/filtered_search/filtered_search_bloc.dart';
-
 import 'package:tripadvisor/page/search/list/DraggableSearchableListView.dart';
 import 'package:tripadvisor/page/search/map/map.dart';
 
