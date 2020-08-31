@@ -114,7 +114,7 @@ class _DraggableSearchableListViewState
                     child: Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: Center(
-                        child: Text('Loading Failed'),
+                        child: Text(''),
                       ),
                     ),
                   );

@@ -63,12 +63,12 @@ class Location {
 
   Map<String, dynamic> toJson() => _$LocationToJson(this);
 
-  String toDistance(Position position) {
+  String toDistance(Location location) {
     double distance = calculateDistance(
       lat,
       lng,
-      position.latitude,
-      position.longitude,
+      location.lat,
+      location.lng,
     );
     if (distance < 1) {
       distance *= 1000;
