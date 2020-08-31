@@ -2,15 +2,15 @@ import 'package:http/http.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:tripadvisor/model/place.dart';
+import 'package:intl/intl.dart';
 import '../google_apiKey.dart';
 import 'package:tripadvisor/page/data/viewpoint_classify.dart';
-import 'dart:ui' as ui;
 
 class PlaceApiProvider {
   final Client _client;
   final String _apiKey = google_apiKey;
   final String _baseUrl = "maps.googleapis.com";
-  final String _locale_language = ui.window.locale.languageCode;
+  final String _locale_language = Intl.getCurrentLocale();
   PlaceApiProvider({Client client}) : _client = client ?? Client();
 
   Future<List<Place>> findPlaceFromText({String query}) async {
@@ -33,6 +33,7 @@ class PlaceApiProvider {
   }
 
   Future<List<Place>> nearBySearch(Location location, double radius) async {
+    print(_locale_language);
     List<Place> ret = [];
     for (var e in ViewpointClassify.values) {
         var response = await _client

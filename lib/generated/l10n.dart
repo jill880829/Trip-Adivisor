@@ -173,6 +173,16 @@ class S {
     );
   }
 
+  /// `Reference point`
+  String get pivot_distant {
+    return Intl.message(
+      'Reference point',
+      name: 'pivot_distant',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Day {day}`
   String schedule_day(Object day) {
     return Intl.message(
