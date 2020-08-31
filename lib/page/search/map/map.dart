@@ -33,6 +33,8 @@ class _MyMapState extends State<MyMap> {
         if (mapState is MapMarkerTapped){
           BlocProvider.of<DraggableListViewBloc>(context)
               .add(ChangeDetail(mapState.place));
+          BlocProvider.of<MapBloc>(context)
+              .add(MarkerSuccess(mapState.cameraPosition));
         }
         return GoogleMap(
           onMapCreated: _onMapCreated,

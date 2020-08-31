@@ -63,3 +63,15 @@ class MapMarkerTapping extends MapEvent {
   @override
   String toString() => "MapMarkerTapping";
 }
+
+class MarkerSuccess extends MapEvent {
+  final CameraPosition cameraPosition;
+
+  const MarkerSuccess(this.cameraPosition);
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => "MarkerSuccess";
+}

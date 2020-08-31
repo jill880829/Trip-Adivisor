@@ -52,6 +52,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       yield* _mapMapMovingToState(event, state);
     } else if (event is MapMarkerTapping) {
       yield MapMarkerTapped(event.cameraPosition, state.markers, event.place);
+    } else if (event is MarkerSuccess) {
+      yield MapLoadSuccess(state.markers, event.cameraPosition);
     }
   }
 
