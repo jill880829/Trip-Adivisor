@@ -4,11 +4,13 @@ import 'dart:convert';
 import 'package:tripadvisor/model/place.dart';
 import '../google_apiKey.dart';
 import 'package:tripadvisor/page/data/viewpoint_classify.dart';
+import 'dart:ui' as ui;
 
 class PlaceApiProvider {
   final Client _client;
   final String _apiKey = google_apiKey;
   final String _baseUrl = "maps.googleapis.com";
+  final String _locale_language = ui.window.locale.languageCode;
   PlaceApiProvider({Client client}) : _client = client ?? Client();
 
   Future<List<Place>> findPlaceFromText({String query}) async {
@@ -17,7 +19,7 @@ class PlaceApiProvider {
       'key': _apiKey,
       'inputtype': 'textquery',
       'input': query,
-      'language': 'zh-TW'
+      'language': _locale_language
     }));
 
     final List<String> placeIds = json
@@ -38,7 +40,7 @@ class PlaceApiProvider {
           'key': _apiKey,
           'location': location.lat.toString() + ',' + location.lng.toString(),
           'radius': radius.toString(),
-          'language': 'zh-TW',
+          'language': _locale_language,
           'type': e.type
         }));
 
@@ -61,7 +63,7 @@ class PlaceApiProvider {
     final response = await _client
         .get(Uri.https(_baseUrl, '/maps/api/place/autocomplete/json', {
       'key': _apiKey,
-      'language': 'zh-TW',
+      'language': _locale_language,
       'input': query,
       'location': location.lat.toString() + ',' + location.lng.toString(),
       'radius': '1',
@@ -95,7 +97,7 @@ class PlaceApiProvider {
         'opening_hours/weekday_text',
         'review'
       ].join(','),
-      'language': 'zh-TW'
+      'language': _locale_language
     }));
 
     return Place.fromJson(json.decode(response.body)['result']);
