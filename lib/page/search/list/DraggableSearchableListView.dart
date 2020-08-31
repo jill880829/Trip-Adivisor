@@ -58,19 +58,41 @@ class _DraggableSearchableListViewState
                                     child: Row(
                                       children: <Widget>[
                                         Flexible(
-                                          child: TextField(
-                                            focusNode: FocusNode(),
-                                            enableInteractiveSelection: false,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              prefixIcon: Icon(Icons.search),
-                                              hintText:
-                                                  S.of(context).search_hint,
-                                            ),
-                                            onTap: () => showSearch(
-                                              context: context,
-                                              delegate: SearchPlaceDelegate(),
-                                            ),
+                                          child: BlocBuilder<SearchBloc, SearchState>(
+                                            builder: (context, mapState) {
+                                              if(mapState is SearchLoadSuccess){
+                                                return TextField(
+                                                  focusNode: FocusNode(),
+                                                  enableInteractiveSelection: false,
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    prefixIcon: Icon(Icons.search),
+                                                    hintText: (mapState.pivot == null)
+                                                        ? S.of(context).search_hint
+                                                        : S.of(context).input_nearby(
+                                                        mapState.pivot.name),
+                                                  ),
+                                                  onTap: () => showSearch(
+                                                    context: context,
+                                                    delegate: SearchPlaceDelegate(),
+                                                  ),
+                                                );
+                                              } else {
+                                                return TextField(
+                                                  focusNode: FocusNode(),
+                                                  enableInteractiveSelection: false,
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    prefixIcon: Icon(Icons.search),
+                                                    hintText: S.of(context).search_hint,
+                                                  ),
+                                                  onTap: () => showSearch(
+                                                    context: context,
+                                                    delegate: SearchPlaceDelegate(),
+                                                  ),
+                                                );
+                                              }
+                                            },
                                           ),
                                         ),
                                         Container(
@@ -78,7 +100,8 @@ class _DraggableSearchableListViewState
                                         ),
                                         IconButton(
                                           icon: Icon(Icons.cancel),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                          },
                                         ),
                                       ],
                                     ),

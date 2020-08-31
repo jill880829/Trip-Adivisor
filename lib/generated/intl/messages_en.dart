@@ -21,7 +21,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(distantCount) => "${distantCount} away";
 
-  static m1(day) => "Day ${day}";
+  static m1(place) => "nearby ${place}";
+
+  static m2(day) => "Day ${day}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -34,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "comment" : MessageLookupByLibrary.simpleMessage("Comment"),
     "distant" : m0,
     "favorite" : MessageLookupByLibrary.simpleMessage("Favorite"),
+    "input_nearby" : m1,
     "minute" : MessageLookupByLibrary.simpleMessage("minute"),
     "navigation" : MessageLookupByLibrary.simpleMessage("Navigation"),
     "new_schedule" : MessageLookupByLibrary.simpleMessage("New Schedule"),
@@ -43,7 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pivot_distant" : MessageLookupByLibrary.simpleMessage("Reference point"),
     "position" : MessageLookupByLibrary.simpleMessage("Position"),
     "schedule" : MessageLookupByLibrary.simpleMessage("Schedule"),
-    "schedule_day" : m1,
+    "schedule_day" : m2,
     "search" : MessageLookupByLibrary.simpleMessage("Search"),
     "search_hint" : MessageLookupByLibrary.simpleMessage("Please enter address or place name"),
     "search_web" : MessageLookupByLibrary.simpleMessage("Search"),

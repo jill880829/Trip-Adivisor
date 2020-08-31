@@ -24,6 +24,12 @@
       "day": {}
     }
   },
+  "input_nearby": "{place} 附近",
+  "@input_nearby": {
+    "placeholders": {
+      "place": {}
+    }
+  },
   "pivot_distant": "此為基準點",
   "position": "定位",
   "favorite": "收藏",

@@ -21,7 +21,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(distantCount) => "距離 ${distantCount}";
 
-  static m1(day) => "第 ${day} 天";
+  static m1(place) => "${place} 附近";
+
+  static m2(day) => "第 ${day} 天";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -34,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "comment" : MessageLookupByLibrary.simpleMessage("評論摘要"),
     "distant" : m0,
     "favorite" : MessageLookupByLibrary.simpleMessage("收藏"),
+    "input_nearby" : m1,
     "minute" : MessageLookupByLibrary.simpleMessage("分鐘"),
     "navigation" : MessageLookupByLibrary.simpleMessage("導航"),
     "new_schedule" : MessageLookupByLibrary.simpleMessage("新增行程"),
@@ -43,7 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pivot_distant" : MessageLookupByLibrary.simpleMessage("此為基準點"),
     "position" : MessageLookupByLibrary.simpleMessage("定位"),
     "schedule" : MessageLookupByLibrary.simpleMessage("行程規劃"),
-    "schedule_day" : m1,
+    "schedule_day" : m2,
     "search" : MessageLookupByLibrary.simpleMessage("景點搜尋"),
     "search_hint" : MessageLookupByLibrary.simpleMessage("請輸入地址 \\ 名稱"),
     "search_web" : MessageLookupByLibrary.simpleMessage("搜尋"),
