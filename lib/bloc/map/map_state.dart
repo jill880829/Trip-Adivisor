@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tripadvisor/model/place.dart';
 
 abstract class MapState extends Equatable {
   final CameraPosition cameraPosition;
@@ -49,4 +50,16 @@ class MapLoadFailure extends MapState {
 
   @override
   List<Object> get props => [];
+}
+
+class MapMarkerTapped extends MapState {
+  Place place;
+  MapMarkerTapped(CameraPosition cameraPosition, Set<Marker> markers, this.place)
+      : super(cameraPosition, markers);
+
+  @override
+  String toString() => 'MapMarkerTapped';
+
+  @override
+  List<Object> get props => [place];
 }

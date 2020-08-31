@@ -50,6 +50,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       yield* _mapMapUpdatedToState(event, state);
     } else if (event is MapMoving) {
       yield* _mapMapMovingToState(event, state);
+    } else if (event is MapMarkerTapping) {
+      yield MapMarkerTapped(event.cameraPosition, state.markers, event.place);
     }
   }
 
@@ -92,6 +94,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           snippet: place.rating.toString(),
         ),
         icon: place_icon[place.type],
+        onTap: ()  {
+          this.add(MapMarkerTapping(state.cameraPosition, place));
+        },
       ));
     }
     if (pivot != null) {
@@ -104,6 +109,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           snippet: pivot.rating.toString(),
         ),
         icon: BitmapDescriptor.defaultMarker,
+        onTap: () {
+          this.add(MapMarkerTapping(state.cameraPosition,pivot));
+        },
       ));
     }
     return markers;

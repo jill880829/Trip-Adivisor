@@ -50,3 +50,16 @@ class MapMoving extends MapEvent {
   @override
   String toString() => "MapMoving";
 }
+
+class MapMarkerTapping extends MapEvent {
+  final CameraPosition cameraPosition;
+  final Place place;
+
+  const MapMarkerTapping(this.cameraPosition, this.place);
+
+  @override
+  List<Object> get props => [place];
+
+  @override
+  String toString() => "MapMarkerTapping";
+}

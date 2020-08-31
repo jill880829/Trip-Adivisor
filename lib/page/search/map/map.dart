@@ -30,6 +30,10 @@ class _MyMapState extends State<MyMap> {
       builder: (context, mapState) {
         if (mapState is MapInitial) return Column();
         if (mapState is MapInMoving) _moveToPosition(mapState.cameraPosition);
+        if (mapState is MapMarkerTapped){
+          BlocProvider.of<DraggableListViewBloc>(context)
+              .add(ChangeDetail(mapState.place));
+        }
         return GoogleMap(
           onMapCreated: _onMapCreated,
           myLocationEnabled: true,
@@ -48,6 +52,7 @@ class _MyMapState extends State<MyMap> {
               );
             }
           },
+
         );
       },
     );
