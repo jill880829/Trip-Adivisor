@@ -33,7 +33,6 @@ class PlaceApiProvider {
   }
 
   Future<List<Place>> nearBySearch(Location location, double radius) async {
-    print(_locale_language);
     List<Place> ret = [];
     for (var e in ViewpointClassify.values) {
         var response = await _client
