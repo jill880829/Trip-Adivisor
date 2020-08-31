@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_data" : MessageLookupByLibrary.simpleMessage("暫無資料"),
     "opening_time" : MessageLookupByLibrary.simpleMessage("營業時間"),
     "phone" : MessageLookupByLibrary.simpleMessage("電話號碼"),
+    "pivot_distant" : MessageLookupByLibrary.simpleMessage("此為基準點"),
     "position" : MessageLookupByLibrary.simpleMessage("定位"),
     "schedule" : MessageLookupByLibrary.simpleMessage("行程規劃"),
     "schedule_day" : m1,

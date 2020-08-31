@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_data" : MessageLookupByLibrary.simpleMessage("No Data"),
     "opening_time" : MessageLookupByLibrary.simpleMessage("Opening Time"),
     "phone" : MessageLookupByLibrary.simpleMessage("Phone Number"),
+    "pivot_distant" : MessageLookupByLibrary.simpleMessage("Reference point"),
     "position" : MessageLookupByLibrary.simpleMessage("Position"),
     "schedule" : MessageLookupByLibrary.simpleMessage("Schedule"),
     "schedule_day" : m1,

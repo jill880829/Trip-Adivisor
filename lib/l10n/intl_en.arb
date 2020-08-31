@@ -18,6 +18,7 @@
       "distantCount": {}
     }
   },
+  "pivot_distant": "Reference point",
   "schedule_day": "Day {day}",
   "@schedule_day": {
     "placeholders": {
