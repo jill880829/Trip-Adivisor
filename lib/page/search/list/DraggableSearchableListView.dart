@@ -58,37 +58,54 @@ class _DraggableSearchableListViewState
                                     child: Row(
                                       children: <Widget>[
                                         Flexible(
-                                          child: BlocBuilder<SearchBloc, SearchState>(
+                                          child: BlocBuilder<SearchBloc,
+                                              SearchState>(
                                             builder: (context, mapState) {
-                                              if(mapState is SearchLoadSuccess){
+                                              if (mapState
+                                                  is SearchLoadSuccess) {
                                                 return TextField(
                                                   focusNode: FocusNode(),
-                                                  enableInteractiveSelection: false,
+                                                  enableInteractiveSelection:
+                                                      false,
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
-                                                    prefixIcon: Icon(Icons.search),
-                                                    hintText: (mapState.pivot == null)
-                                                        ? S.of(context).search_hint
-                                                        : S.of(context).input_nearby(
-                                                        mapState.pivot.name),
+                                                    prefixIcon:
+                                                        Icon(Icons.search),
+                                                    hintText:
+                                                        (mapState.pivot == null)
+                                                            ? S
+                                                                .of(context)
+                                                                .search_hint
+                                                            : S
+                                                                .of(context)
+                                                                .input_nearby(
+                                                                    mapState
+                                                                        .pivot
+                                                                        .name),
                                                   ),
                                                   onTap: () => showSearch(
                                                     context: context,
-                                                    delegate: SearchPlaceDelegate(),
+                                                    delegate:
+                                                        SearchPlaceDelegate(),
                                                   ),
                                                 );
                                               } else {
                                                 return TextField(
                                                   focusNode: FocusNode(),
-                                                  enableInteractiveSelection: false,
+                                                  enableInteractiveSelection:
+                                                      false,
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
-                                                    prefixIcon: Icon(Icons.search),
-                                                    hintText: S.of(context).search_hint,
+                                                    prefixIcon:
+                                                        Icon(Icons.search),
+                                                    hintText: S
+                                                        .of(context)
+                                                        .search_hint,
                                                   ),
                                                   onTap: () => showSearch(
                                                     context: context,
-                                                    delegate: SearchPlaceDelegate(),
+                                                    delegate:
+                                                        SearchPlaceDelegate(),
                                                   ),
                                                 );
                                               }
@@ -101,6 +118,8 @@ class _DraggableSearchableListViewState
                                         IconButton(
                                           icon: Icon(Icons.cancel),
                                           onPressed: () {
+                                            BlocProvider.of<SearchBloc>(context)
+                                                .add(PivotUpdated(null));
                                           },
                                         ),
                                       ],
