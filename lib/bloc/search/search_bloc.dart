@@ -52,7 +52,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
     SearchInitialized event,
     SearchInitial state,
   ) async* {
-    yield SearchLoadInProgress();
+    yield SearchLoadInProgress(null);
     final Position currentPosition = await Geolocator().getCurrentPosition();
     final List<Place> nearby = await _placeApiProvider.nearBySearch(
       Location(
@@ -88,7 +88,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
     SearchNearbyByPosition event,
     SearchLoadSuccess state,
   ) async* {
-    yield SearchLoadInProgress();
+    yield SearchLoadInProgress(state.pivot);
     try {
       event.mapBloc.add(MapMoving(event.cameraPosition));
       final Position position = await Geolocator().getCurrentPosition();
@@ -109,7 +109,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
   Stream<SearchState> _mapSearchSuggestionListToState(
     SearchSuggestionList event,
   ) async* {
-    yield SearchLoadInProgress();
+    yield SearchLoadInProgress(null);
     try {
       final Position position = await Geolocator().getCurrentPosition();
       final places = await _placeApiProvider.autocomplete(

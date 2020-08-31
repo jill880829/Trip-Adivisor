@@ -58,11 +58,10 @@ class _DraggableSearchableListViewState
                                     child: Row(
                                       children: <Widget>[
                                         Flexible(
-                                          child: BlocBuilder<SearchBloc,
-                                              SearchState>(
-                                            builder: (context, mapState) {
-                                              if (mapState
-                                                  is SearchLoadSuccess) {
+                                          child: BlocBuilder<FilteredSearchBloc,
+                                              FilteredSearchState>(
+                                            builder: (context, state) {
+                                              if (state is SearchLoadSuccess) {
                                                 return TextField(
                                                   focusNode: FocusNode(),
                                                   enableInteractiveSelection:
@@ -71,17 +70,15 @@ class _DraggableSearchableListViewState
                                                     border: InputBorder.none,
                                                     prefixIcon:
                                                         Icon(Icons.search),
-                                                    hintText:
-                                                        (mapState.pivot == null)
-                                                            ? S
-                                                                .of(context)
-                                                                .search_hint
-                                                            : S
-                                                                .of(context)
-                                                                .input_nearby(
-                                                                    mapState
-                                                                        .pivot
-                                                                        .name),
+                                                    hintText: (state.pivot ==
+                                                            null)
+                                                        ? S
+                                                            .of(context)
+                                                            .search_hint
+                                                        : S
+                                                            .of(context)
+                                                            .input_nearby(state
+                                                                .pivot.name),
                                                   ),
                                                   onTap: () => showSearch(
                                                     context: context,
@@ -98,9 +95,15 @@ class _DraggableSearchableListViewState
                                                     border: InputBorder.none,
                                                     prefixIcon:
                                                         Icon(Icons.search),
-                                                    hintText: S
-                                                        .of(context)
-                                                        .search_hint,
+                                                    hintText: (state.pivot ==
+                                                            null)
+                                                        ? S
+                                                            .of(context)
+                                                            .search_hint
+                                                        : S
+                                                            .of(context)
+                                                            .input_nearby(state
+                                                                .pivot.name),
                                                   ),
                                                   onTap: () => showSearch(
                                                     context: context,

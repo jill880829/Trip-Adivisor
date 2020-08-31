@@ -3,41 +3,42 @@ import 'package:tripadvisor/model/place.dart';
 import 'package:geolocator/geolocator.dart';
 
 abstract class FilteredSearchState extends Equatable {
+  final Place pivot;
   final List<String> activeFilter;
-  const FilteredSearchState(this.activeFilter);
+  const FilteredSearchState(this.activeFilter, this.pivot);
 
   @override
-  List<Object> get props => [activeFilter];
+  List<Object> get props => [activeFilter, pivot];
 }
 
 class FilteredSearchInitial extends FilteredSearchState {
-  const FilteredSearchInitial() : super(const []);
+  const FilteredSearchInitial() : super(const [], null);
 
   @override
   String toString() => 'FilteredSearchInitial';
 }
 
 class FilteredSearchLoadSuccess extends FilteredSearchState {
-  final Place pivot;
   final List<Place> nearby;
   final Position currentPosition;
 
   const FilteredSearchLoadSuccess(
-    this.pivot,
+    pivot,
     this.nearby,
     this.currentPosition,
     List<String> activeFilter,
-  ) : super(activeFilter);
+  ) : super(activeFilter, pivot);
 
   @override
-  List<Object> get props => [pivot, nearby, currentPosition];
+  List<Object> get props => [nearby, currentPosition];
 
   @override
   String toString() => 'FilteredSearchLoadSuccess';
 }
 
 class FilteredSearchLoadInProgress extends FilteredSearchState {
-  FilteredSearchLoadInProgress(activeFilter) : super(activeFilter);
+  FilteredSearchLoadInProgress(activeFilter, pivot)
+      : super(activeFilter, pivot);
 
   @override
   List<Object> get props => [];
