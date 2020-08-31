@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -30,7 +28,7 @@ class _MyMapState extends State<MyMap> {
       builder: (context, mapState) {
         if (mapState is MapInitial) return Column();
         if (mapState is MapInMoving) _moveToPosition(mapState.cameraPosition);
-        if (mapState is MapMarkerTapped){
+        if (mapState is MapMarkerTapped) {
           BlocProvider.of<DraggableListViewBloc>(context)
               .add(ChangeDetail(mapState.place));
           BlocProvider.of<MapBloc>(context)
@@ -43,18 +41,14 @@ class _MyMapState extends State<MyMap> {
           markers: mapState.markers,
           onCameraMove: (position) {
             if (mapState is MapLoadSuccess) {
-              BlocProvider.of<MapBloc>(context).add(MapMoving(position));
-              final LatLng target = position.target;
-              final double zoom = position.zoom;
               BlocProvider.of<SearchBloc>(context).add(
-                SearchNearbyByLocation(
-                  Location(target.latitude, target.longitude),
-                  3e7 / pow(2, zoom),
+                SearchNearbyByPosition(
+                  position,
+                  BlocProvider.of<MapBloc>(context),
                 ),
               );
             }
           },
-
         );
       },
     );

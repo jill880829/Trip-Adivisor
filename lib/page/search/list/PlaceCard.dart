@@ -14,6 +14,8 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SearchLoadSuccess searchState =
+        BlocProvider.of<SearchBloc>(context).state;
     return GestureDetector(
       onTap: () {
         BlocProvider.of<DraggableListViewBloc>(context)
@@ -63,9 +65,15 @@ class PlaceCard extends StatelessWidget {
                           Text(
                             S.of(context).distant(
                                   _place.geometry.location.toDistance(
-                                      (BlocProvider.of<SearchBloc>(context)
-                                              .state as SearchLoadSuccess)
-                                          .currentPosition),
+                                    searchState.pivot == null
+                                        ? Location(
+                                            searchState
+                                                .currentPosition.latitude,
+                                            searchState
+                                                .currentPosition.longitude,
+                                          )
+                                        : searchState.pivot.geometry.location,
+                                  ),
                                 ),
                           ),
                         ],

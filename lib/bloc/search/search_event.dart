@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripadvisor/model/place.dart';
+import 'package:tripadvisor/bloc/bloc.dart';
 
 abstract class SearchEvent extends Equatable {
   const SearchEvent();
@@ -18,18 +20,18 @@ class SearchInitialized extends SearchEvent {
   String toString() => "SearchInitialized";
 }
 
-class SearchNearbyByLocation extends SearchEvent {
-  final Location location;
-  final double radius;
+class SearchNearbyByPosition extends SearchEvent {
+  final CameraPosition cameraPosition;
+  final MapBloc mapBloc;
 
-  const SearchNearbyByLocation(this.location, this.radius);
+  const SearchNearbyByPosition(this.cameraPosition, this.mapBloc);
 
   @override
-  List<Object> get props => [location, radius];
+  List<Object> get props => [cameraPosition, mapBloc];
 
   @override
   String toString() =>
-      "SearchNearbyByLocation { location: $location, radius: $radius }";
+      "SearchNearbyByLocation { cameraPosition: $cameraPosition }";
 }
 
 class SearchNearbyByPlace extends SearchEvent {

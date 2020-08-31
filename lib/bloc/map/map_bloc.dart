@@ -14,11 +14,11 @@ import 'package:rxdart/rxdart.dart';
 import 'dart:typed_data';
 import 'package:flutter/services.dart' show rootBundle;
 
-
 class MapBloc extends Bloc<MapEvent, MapState> {
   final FilteredSearchBloc filteredSearchBloc;
   StreamSubscription filteredSearchSubscription;
-  Map<String, BitmapDescriptor> place_icon = new Map<String,BitmapDescriptor>();
+  Map<String, BitmapDescriptor> place_icon =
+      new Map<String, BitmapDescriptor>();
 
   MapBloc({@required this.filteredSearchBloc}) : super(MapInitial(null, {})) {
     setCustomMapMarker();
@@ -30,17 +30,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     });
   }
 
-  @override
-  Stream<Transition<MapEvent, MapState>> transformEvents(
-      Stream<MapEvent> events,
-      Stream<Transition<MapEvent, MapState>> Function(
-    MapEvent event,
-  )
-          transitionFn) {
-    return events
-        .debounceTime(const Duration(milliseconds: 300))
-        .switchMap(transitionFn);
-  }
+  // @override
+  // Stream<Transition<MapEvent, MapState>> transformEvents(
+  //     Stream<MapEvent> events,
+  //     Stream<Transition<MapEvent, MapState>> Function(
+  //   MapEvent event,
+  // )
+  //         transitionFn) {
+  //   return events
+  //       .debounceTime(const Duration(milliseconds: 300))
+  //       .switchMap(transitionFn);
+  // }
 
   @override
   Stream<MapState> mapEventToState(
@@ -96,9 +96,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           snippet: place.rating.toString(),
         ),
         icon: place_icon[place.type],
-        onTap: ()  {
+        onTap: () {
           this.add(MapMarkerTapping(state.cameraPosition, place));
         },
+        consumeTapEvents: true,
       ));
     }
     if (pivot != null) {
@@ -112,8 +113,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         ),
         icon: BitmapDescriptor.defaultMarker,
         onTap: () {
-          this.add(MapMarkerTapping(state.cameraPosition,pivot));
+          this.add(MapMarkerTapping(state.cameraPosition, pivot));
         },
+        consumeTapEvents: true,
       ));
     }
     return markers;
@@ -127,16 +129,23 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
   }
 
   void setCustomMapMarker() async {
-    final Uint8List place = await getBytesFromAsset('assets/images/icon_place.png', 70);
-    final Uint8List eat = await getBytesFromAsset('assets/images/icon_eat.png', 70);
-    final Uint8List hotel = await getBytesFromAsset('assets/images/icon_hotel.png', 70);
-    final Uint8List bus = await getBytesFromAsset('assets/images/icon_bus.png', 70);
+    final Uint8List place =
+        await getBytesFromAsset('assets/images/icon_place.png', 70);
+    final Uint8List eat =
+        await getBytesFromAsset('assets/images/icon_eat.png', 70);
+    final Uint8List hotel =
+        await getBytesFromAsset('assets/images/icon_hotel.png', 70);
+    final Uint8List bus =
+        await getBytesFromAsset('assets/images/icon_bus.png', 70);
 
     place_icon["tourist_attraction"] = BitmapDescriptor.fromBytes(place);
     place_icon["restaurant"] = BitmapDescriptor.fromBytes(eat);
