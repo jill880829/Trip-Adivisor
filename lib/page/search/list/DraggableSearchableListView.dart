@@ -58,19 +58,61 @@ class _DraggableSearchableListViewState
                                     child: Row(
                                       children: <Widget>[
                                         Flexible(
-                                          child: TextField(
-                                            focusNode: FocusNode(),
-                                            enableInteractiveSelection: false,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              prefixIcon: Icon(Icons.search),
-                                              hintText:
-                                                  S.of(context).search_hint,
-                                            ),
-                                            onTap: () => showSearch(
-                                              context: context,
-                                              delegate: SearchPlaceDelegate(),
-                                            ),
+                                          child: BlocBuilder<FilteredSearchBloc,
+                                              FilteredSearchState>(
+                                            builder: (context, state) {
+                                              if (state is SearchLoadSuccess) {
+                                                return TextField(
+                                                  focusNode: FocusNode(),
+                                                  enableInteractiveSelection:
+                                                      false,
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    prefixIcon:
+                                                        Icon(Icons.search),
+                                                    hintText: (state.pivot ==
+                                                            null)
+                                                        ? S
+                                                            .of(context)
+                                                            .search_hint
+                                                        : S
+                                                            .of(context)
+                                                            .input_nearby(state
+                                                                .pivot.name),
+                                                  ),
+                                                  onTap: () => showSearch(
+                                                    context: context,
+                                                    delegate:
+                                                        SearchPlaceDelegate(),
+                                                  ),
+                                                );
+                                              } else {
+                                                return TextField(
+                                                  focusNode: FocusNode(),
+                                                  enableInteractiveSelection:
+                                                      false,
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    prefixIcon:
+                                                        Icon(Icons.search),
+                                                    hintText: (state.pivot ==
+                                                            null)
+                                                        ? S
+                                                            .of(context)
+                                                            .search_hint
+                                                        : S
+                                                            .of(context)
+                                                            .input_nearby(state
+                                                                .pivot.name),
+                                                  ),
+                                                  onTap: () => showSearch(
+                                                    context: context,
+                                                    delegate:
+                                                        SearchPlaceDelegate(),
+                                                  ),
+                                                );
+                                              }
+                                            },
                                           ),
                                         ),
                                         Container(
@@ -78,7 +120,10 @@ class _DraggableSearchableListViewState
                                         ),
                                         IconButton(
                                           icon: Icon(Icons.cancel),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            BlocProvider.of<SearchBloc>(context)
+                                                .add(PivotUpdated(null));
+                                          },
                                         ),
                                       ],
                                     ),

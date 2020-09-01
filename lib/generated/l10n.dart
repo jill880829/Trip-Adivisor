@@ -193,6 +193,16 @@ class S {
     );
   }
 
+  /// `nearby {place}`
+  String input_nearby(Object place) {
+    return Intl.message(
+      'nearby $place',
+      name: 'input_nearby',
+      desc: '',
+      args: [place],
+    );
+  }
+
   /// `Position`
   String get position {
     return Intl.message(

@@ -29,11 +29,15 @@ class SearchLoadSuccess extends SearchState {
 }
 
 class SearchLoadInProgress extends SearchState {
+  final Place pivot;
+
+  SearchLoadInProgress(this.pivot);
+
   @override
   String toString() => 'SearchLoadInProgress';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [pivot];
 }
 
 class SearchLoadFailure extends SearchState {

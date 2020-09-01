@@ -43,6 +43,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
       yield* _mapSearchNearbyByPlaceToState(event, state);
     } else if (event is SearchSuggestionList) {
       yield* _mapSearchSuggestionListToState(event);
+    } else if (event is PivotUpdated && state is SearchLoadSuccess) {
+      yield* _mapPivotUpdatedToState(event, state);
     }
   }
 
@@ -50,7 +52,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
     SearchInitialized event,
     SearchInitial state,
   ) async* {
-    yield SearchLoadInProgress();
+    yield SearchLoadInProgress(null);
     final Position currentPosition = await Geolocator().getCurrentPosition();
     final List<Place> nearby = await _placeApiProvider.nearBySearch(
       Location(
@@ -60,6 +62,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
       1000,
     );
     yield SearchLoadSuccess(null, nearby, currentPosition);
+  }
+
+  Stream<SearchState> _mapPivotUpdatedToState(
+    PivotUpdated event,
+    SearchLoadSuccess state,
+  ) async* {
+    final Position currentPosition = await Geolocator().getCurrentPosition();
+    yield SearchLoadSuccess(event.pivot, state.nearby, currentPosition);
   }
 
   Stream<SearchState> _mapSearchNearbyByPlaceToState(
@@ -78,7 +88,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
     SearchNearbyByPosition event,
     SearchLoadSuccess state,
   ) async* {
-    yield SearchLoadInProgress();
+    yield SearchLoadInProgress(state.pivot);
     try {
       event.mapBloc.add(MapMoving(event.cameraPosition));
       final Position position = await Geolocator().getCurrentPosition();
@@ -99,7 +109,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> with SuggestionBloc {
   Stream<SearchState> _mapSearchSuggestionListToState(
     SearchSuggestionList event,
   ) async* {
-    yield SearchLoadInProgress();
+    yield SearchLoadInProgress(null);
     try {
       final Position position = await Geolocator().getCurrentPosition();
       final places = await _placeApiProvider.autocomplete(

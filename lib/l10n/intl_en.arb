@@ -25,6 +25,12 @@
       "day": {}
     }
   },
+  "input_nearby": "nearby {place}",
+  "@input_nearby": {
+    "placeholders": {
+      "place": {}
+    }
+  },
   "position": "Position",
   "favorite": "Favorite",
   "search_web": "Search",
